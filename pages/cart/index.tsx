@@ -1,11 +1,16 @@
+import styled from "@emotion/styled";
 import React from "react";
+
+const CartPageContainer = styled.div`
+`
+
 
 const CartPage = () => {
 
   return (
-    <div>
+    <CartPageContainer>
       Cart
-    </div>
+    </CartPageContainer>
   )
 };
 
