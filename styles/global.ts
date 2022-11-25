@@ -20,7 +20,7 @@ const global = css`
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background-color: palegoldenrod;
   }
 

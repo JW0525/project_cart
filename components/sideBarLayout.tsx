@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 
-const SidBarContainer = styled.div`
+const SideBarContainer = styled.div`
+  height: 100%;
+  position: relative;
   
   .side-bar {
     position: absolute;
@@ -10,16 +12,15 @@ const SidBarContainer = styled.div`
     width: 300px;
     background-color: blue;
   }
-
 `
 
 const SideBarLayout = (props: any) => {
 
   return (
-    <SidBarContainer>
+    <SideBarContainer>
       <div className='side-bar' />
       {props.children}
-    </SidBarContainer>
+    </SideBarContainer>
   )
 }
 
