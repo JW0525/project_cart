@@ -9,26 +9,22 @@ import textCss from "../../styles/textCss";
 import { NumberToCurrency } from "../../utils/regExpression";
 
 const ProductsPageContainer = styled.div`
-  margin-left: 300px;
   width: 100%;
-  
+  margin-left: 300px;
+
   ul {
     display: flex;
     justify-content: space-between;
     flex-flow: row wrap;
-    width: 100%;
 
     li {
       display: grid;
-      position: relative;
-      width: 100%;
       ${setResponsive({
         flexBasis: ['100%', '47%', '30%'],
       })}
     
+       // image width, height 비율 같게 하기 위해서 image 를 감싸준다.
       .image-container {
-        display: flex;
-        flex-direction: column;
         position: relative;
         width: 100%;
         min-width: 245px;
@@ -46,31 +42,40 @@ const ProductsPageContainer = styled.div`
       }
       
       .description-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 100%;
-        height: 10%;
-        padding: 30px 0 0 0 ;
+        display: grid;
+        grid-template-columns: 1fr 60px;
+        height: 85px;
+        padding: 10px 5px;
         
-        h1 {
-          padding-bottom: 10px;
-          ${textCss.gray12Medium}
-          color: #5d5d5d;
+        .text-box {
+          margin-right: 10px;
+          h1 {
+            padding-bottom: 10px;
+            ${textCss.gray12Medium}
+            color: #5d5d5d;
+          }
+          
+          span {
+            display: flex;
+            
+            p {
+              ${textCss.gray14Bold}
+
+              :nth-of-type(2) {
+                padding-left: 2px;
+                font-size: 12px;
+                font-weight: 400;
+              }
+            }
+          }
         }
         
-        span {
-          display: flex;
-          align-items: center;
-
-          p {
-            ${textCss.gray14Bold}
-
-            :nth-of-type(2) {
-              padding-left: 2px;
-              font-size: 12px;
-              font-weight: 400;
-            }
+        .cart-button-box {
+          
+          button {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
           }
         }
       }
@@ -99,11 +104,17 @@ const ProductsPage: NextPageWithLayout = () => {
                   <img src={e.detail_image_url} />
                 </div>
                 <div className='description-container'>
-                  <h1>{e.item_name}</h1>
-                  <span>
+                  <div className='text-box'>
+                    <h1>{e.item_name}</h1>
+                    <span>
                     <p>{NumberToCurrency(e.price)}</p>
                     <p>원</p>
                   </span>
+                  </div>
+                  <div className='cart-button-box'>
+                    <button className='add-cart'>+</button>
+                    <button className='subtract-cart'>-</button>
+                  </div>
                 </div>
               </li>
             )
