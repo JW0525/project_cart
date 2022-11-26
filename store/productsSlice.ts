@@ -28,16 +28,15 @@ const cartSlice = createSlice({
 
       // list 에 상품이 없을 시 추가하고, 있다면 제거한다.
       if (productList.every(product => product.item_no !== item_no)) {
-        state.productList.push(product);
+        if (productList.length < 3) {
+          state.productList.push(product);
+        } else {
+          alert('3개까지만 선택이 가능합니다.')
+        }
       } else {
         state.productList = state.productList.filter(product =>
           product.item_no !== item_no
         )
-      }
-
-      if (productList.length > 2) {
-        alert('3개까지만 선택이 가능합니다.')
-        return;
       }
     },
   }

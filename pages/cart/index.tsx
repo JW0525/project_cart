@@ -146,6 +146,8 @@ const CartPage = () => {
   const cart = useSelector(getCartData);
   const { productList } = cart;
 
+  console.log(cart);
+
   const handleAddProduct = (e: ChangeEvent<HTMLInputElement>) => {
     const clickedProductItemNo = Number(e.currentTarget.value);
     dispatch(setProductSellYn(clickedProductItemNo));

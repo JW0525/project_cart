@@ -1,5 +1,7 @@
 // import icons from '../imgs/icon.svg';
 
+import {css} from "@emotion/react";
+
 export const fontFamily = {
   notoSans300: {
     fontFamily: "'Noto Sans KR', sans-serif",
@@ -202,7 +204,9 @@ export const letterSpacing = {
   }
 }
 
-// export const backgroundIcons = {
-//   backgroundImage: `url(${icons})`,
-//   backgroundRepeat: 'no-repeat',
-// }
+export const backgroundImages = {
+  icon: (icons: string) => css`
+    background-image: url(${`asset/icons/${icons}`});
+    background-size: contain;
+  `
+}

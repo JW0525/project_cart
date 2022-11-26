@@ -1,3 +1,3 @@
 import {RootState} from "./modules";
 
-export const getProductList = (state: RootState) => state.productsSlice;
+export const getProductList = (state: RootState) => state.productsSlice.productList;

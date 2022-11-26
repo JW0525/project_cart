@@ -27,7 +27,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     initialize: (state, action: PayloadAction<any>) => {
-      const { productList } = action.payload;
+      const productList = action.payload;
 
       const newProductList = [];
 
