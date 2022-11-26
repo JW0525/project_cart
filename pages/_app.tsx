@@ -4,6 +4,8 @@ import { Global } from '@emotion/react';
 import global from "../styles/global";
 import { Layout } from "@/components/layout/layout";
 import { NextPage } from "next";
+import {Provider} from "react-redux";
+import {store} from "../store/modules";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -23,7 +25,9 @@ export default function App({
   return getLayout(
     <Layout>
       <Global styles={global} />
-      <Component {...pageProps} />
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
     </Layout>
   );
 }

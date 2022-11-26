@@ -1,15 +1,16 @@
 import CheckBoxWrapper from "@/components/common/CheckBox";
 import CartTableProducts from "./CartTableProducts";
 import React from "react";
-import {IProductData} from "../../products";
+import { ProductState } from "../../../store/productsSlice";
 
 const CartTable = (props: {
-  array: IProductData[];
-  orderData: IProductData[];
-  addHandler: Function;
-  addAllHandler: Function;
+  array: ProductState[];
+  orderData: ProductState[];
+  addProductHandler: Function;
+  addAllProductHandler: Function;
+  countHandler: Function;
 }) => {
-  const { array, orderData, addHandler, addAllHandler } = props;
+  const { array, orderData, addProductHandler, addAllProductHandler, countHandler } = props;
 
   return (
     <table className='cart-table'>
@@ -18,7 +19,7 @@ const CartTable = (props: {
         <td>
           <CheckBoxWrapper
             isChecked={array.length === orderData.length}
-            callback={addAllHandler}
+            callback={addAllProductHandler}
           />
         </td>
         <td>상품 정보</td>
@@ -34,7 +35,8 @@ const CartTable = (props: {
             <CartTableProducts
               product={product}
               orderData={orderData}
-              clickHandler={addHandler}
+              clickHandler={addProductHandler}
+              countHandler={countHandler}
               idx={idx}
             />
           </tr>

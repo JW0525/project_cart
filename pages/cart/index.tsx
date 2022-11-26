@@ -1,11 +1,15 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, { ChangeEvent, useState } from "react";
 import styled from "@emotion/styled";
 import uiCss from "../../styles/uiCss";
 import getData from "@/lib/getData";
 import {API} from "../../config";
-import {border} from "../../styles/baseStyle";
-import {IProductData} from "../products";
+import {border, palette} from "../../styles/baseStyle";
 import CartTable from "./components/CartTable";
+import Head from "next/head";
+import {ProductState} from "../../store/productsSlice";
+
+
+
 
 const CartPageContainer = styled.div`
   ${uiCss.flexColumn.center}
@@ -63,7 +67,7 @@ const CartPageContainer = styled.div`
                 }
               }
 
-              .info-wrapper {
+              .info-box {
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
@@ -71,6 +75,34 @@ const CartPageContainer = styled.div`
 
                 > span {
                   display: flex;
+                }
+              }
+            }
+            
+            &.count {
+              .button-box {
+                display: grid;
+                grid-template-columns: 30px 30px 30px;
+                height: 30px;
+                background-color: white;
+                ${border.grayLightEE};
+
+                > div, button {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  padding-top: 3px;
+                  text-align: center;
+                  background-color: ${palette.common.white};
+
+                  :nth-of-type(1) {
+                    border-right: ${border.grayLightEE.border};
+                  }
+                }
+
+                button {
+                  color: ${palette.gray.lightAA};
+                  cursor: pointer;
                 }
               }
             }
@@ -114,9 +146,15 @@ const CartPageContainer = styled.div`
 
 const CartPage = () => {
   const { data: productData, isLoading, isError } = getData(`${API.PRODUCTS}`);
-  const [orderData, setOrderData] = useState<IProductData[]>([]);
+  const [orderData, setOrderData] = useState<ProductState[]>([]);
+  const [productCount, setProductCount] = useState<any>([]);
 
-  if (!productData) return <></>
+
+
+
+
+  if (isLoading) return <></>
+
 
   const test = productData[0];
   const test2 = productData[2];
@@ -128,24 +166,46 @@ const CartPage = () => {
 
 
 
+
+
+
+  const productCountList: any = [];
+
+  for (let i in array) {
+    const { item_no } = array[i];
+    productCountList.push({
+      count: 1,
+      item_no: item_no
+    })
+  }
+
+
+
+
+
+
   // order 에 상품 추가하는 함수
-  const addHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const addProductHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const clickedProductItemNo = Number(e.currentTarget.value);
-    const clickedProduct: IProductData = productData.find((e: any) => {
+    const clickedProduct: ProductState = productData.find((e: any) => {
       return e.item_no === clickedProductItemNo
     });
 
     if (orderData.includes(clickedProduct)) {
-      const newOrderData = orderData.filter((data: IProductData) => {
+      const newOrderData = orderData.filter((data: ProductState) => {
         return data.item_no !== clickedProductItemNo
       });
       setOrderData([...newOrderData]);
+
     } else {
       setOrderData([clickedProduct, ...orderData]);
     }
   };
 
-  const addAllHandler = (e: ChangeEvent<HTMLInputElement>) => {
+
+
+  // order 에 전체 상품 추가하는 함수
+  const addAllProductHandler = (e: ChangeEvent<HTMLInputElement>) => {
     if (array.length === orderData.length) {
       setOrderData([]);
     } else {
@@ -153,25 +213,42 @@ const CartPage = () => {
     }
   }
 
-  return (
-    <CartPageContainer>
-      <CartTable
-        array={array}
-        orderData={orderData}
-        addHandler={addHandler}
-        addAllHandler={addAllHandler}
-      />
 
-      <table className='order-table'>
-        <thead>
+
+
+
+  const countHandler = (e: React.MouseEvent)  => {
+    const clickedProductItemNo = Number((e.target as HTMLSpanElement).getAttribute('data-item'));
+    const buttonType = (e.target as HTMLSpanElement).getAttribute('data-button-type');
+  }
+
+
+  return (
+    <>
+      <Head>
+        <title>장바구니 페이지</title>
+        <meta name="cart" content="장바구니 페이지입니다." />
+      </Head>
+
+      <CartPageContainer>
+        <CartTable
+          array={array}
+          orderData={orderData}
+          addProductHandler={addProductHandler}
+          addAllProductHandler={addAllProductHandler}
+          countHandler={countHandler}
+        />
+
+        <table className='order-table'>
+          <thead>
           <tr>
             <td>총 주문금액</td>
             <td>총 배송비</td>
             <td>총 결제금액</td>
           </tr>
-        </thead>
+          </thead>
 
-        <tbody>
+          <tbody>
           <tr>
             <td>39,900원</td>
             <td>+</td>
@@ -179,10 +256,12 @@ const CartPage = () => {
             <td>+</td>
             <td>39,900원</td>
           </tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
 
-    </CartPageContainer>
+      </CartPageContainer>
+    </>
+
   )
 };
 
