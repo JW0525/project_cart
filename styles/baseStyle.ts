@@ -121,6 +121,9 @@ export const border = {
   grayMain: {
     border: `solid 1px ${palette.gray.main}`
   },
+  grayMain4x: {
+    border: `solid 4px ${palette.gray.main}`
+  },
   grayMedium: {
     border: `solid 1px ${palette.gray.lightAA}`
   },

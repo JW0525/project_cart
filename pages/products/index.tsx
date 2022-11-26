@@ -24,7 +24,7 @@ const ProductsPageContainer = styled.div`
       })}
     
        // image width, height 비율 같게 하기 위해서 image 를 감싸준다.
-      .image-container {
+      .image-wrapper {
         position: relative;
         width: 100%;
         min-width: 245px;
@@ -85,9 +85,8 @@ const ProductsPageContainer = styled.div`
 
 const ProductsPage: NextPageWithLayout = () => {
   const { data, isLoading, isError } = getData(`${API.PRODUCTS}`);
-
-
   if (!data) return <></>
+
   const sortedData = data.sort(function(a: any,b: any) {
     return b.score - a.score;
   })
@@ -97,24 +96,26 @@ const ProductsPage: NextPageWithLayout = () => {
       <ul>
         {
           sortedData.map((e: any, idx: number) => {
-
             return (
               <li key={idx}>
-                <div className='image-container'>
+                <div className='image-wrapper'>
                   <img src={e.detail_image_url} />
                 </div>
                 <div className='description-container'>
-                  <div className='text-box'>
+
+                  <div className='info-box'>
                     <h1>{e.item_name}</h1>
                     <span>
                     <p>{NumberToCurrency(e.price)}</p>
                     <p>원</p>
                   </span>
                   </div>
+
                   <div className='cart-button-box'>
                     <button className='add-cart'>+</button>
                     <button className='subtract-cart'>-</button>
                   </div>
+
                 </div>
               </li>
             )

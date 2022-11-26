@@ -12,6 +12,7 @@ const LayoutContainer = styled.div`
   
   main {
     display: flex;
+    width: 100%;
     height: 100%;
     padding-top: 300px;
   }
