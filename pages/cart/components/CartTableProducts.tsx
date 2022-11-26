@@ -1,14 +1,15 @@
 import CheckBoxWrapper from "@/components/common/CheckBox";
 import { NumberToCurrency } from "../../../utils/regExpression";
 import React from "react";
+import {ProductState} from "../../../store/productsSlice";
 
 const CartTableProducts = (props: {
-  product: any;
+  product: ProductState;
   handleClick: Function;
-  handleCount: Function;
+  handleProductCount: Function;
   idx: number;
 }) => {
-  const { product, handleClick, handleCount, idx } = props;
+  const { product, handleClick, handleProductCount, idx } = props;
 
   return (
     <>
@@ -19,7 +20,6 @@ const CartTableProducts = (props: {
           value={product.item_no}
         />
       </td>
-
 
       <td className='product-info'>
         <div className='image-wrapper'>
@@ -39,7 +39,7 @@ const CartTableProducts = (props: {
       <td className='count'>
         <div
           className='button-box'
-          onClick={(e) => handleCount(e)}
+          onClick={(e) => handleProductCount(e)}
         >
           <button data-item={product.item_no} data-button-type={'subtract'}>
             +
@@ -50,10 +50,6 @@ const CartTableProducts = (props: {
           </button>
         </div>
       </td>
-
-
-
-
 
       <td>39,900원</td>
       <td>39,900원</td>

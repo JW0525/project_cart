@@ -9,9 +9,10 @@ import textCss from "../../styles/textCss";
 import { NumberToCurrency } from "../../utils/regExpression";
 import Head from "next/head";
 import {useDispatch, useSelector} from "react-redux";
-import {addCartProducts, ProductState, subtractCartProducts,} from "../../store/cartSlice";
-import {getCartData} from "../../store/cartSelector";
+import {initialize, ProductState } from "../../store/cartSlice";
 import Link from "next/link";
+import { addCartProducts } from "../../store/productsSlice";
+import { getProductList} from "../../store/productsSelector";
 
 const ProductsPageContainer = styled.div`
   width: 100%;
@@ -48,11 +49,11 @@ const ProductsPageContainer = styled.div`
       
       .description-container {
         display: grid;
-        grid-template-columns: 1fr 60px;
+        grid-template-columns: 1fr 30px;
         height: 85px;
         padding: 10px 5px;
         
-        .text-box {
+        .info-box {
           margin-right: 10px;
           h1 {
             padding-bottom: 10px;
@@ -75,7 +76,7 @@ const ProductsPageContainer = styled.div`
           }
         }
         
-        .cart-button-box {
+        .button-box {
           
           button {
             width: 30px;
@@ -91,7 +92,7 @@ const ProductsPageContainer = styled.div`
 const ProductsPage: NextPageWithLayout = () => {
   const { data, isLoading, isError } = getData(`${API.PRODUCTS}`);
   const dispatch = useDispatch();
-  const cart = useSelector(getCartData);
+  const productList = useSelector(getProductList);
 
   if (isLoading) return <></>
 
@@ -111,21 +112,11 @@ const ProductsPage: NextPageWithLayout = () => {
     }));
   }
 
-  const subtractCartHandler = (e: any) => {
-    const clickedProductItemNo = Number(e.currentTarget.value);
-
-    dispatch(subtractCartProducts({
-      item_no: clickedProductItemNo,
-    }));
-  }
-
-
   return (
     <>
       <Head>
         <title>상품 페이지</title>
         <meta name="products" content="상품 페이지입니다." />
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
       </Head>
 
       <ProductsPageContainer>
@@ -142,26 +133,18 @@ const ProductsPage: NextPageWithLayout = () => {
                     <div className='info-box'>
                       <h1>{e.item_name}</h1>
                       <span>
-                      <p>{NumberToCurrency(e.price)}</p>
-                      <p>원</p>
-                    </span>
+                        <p>{NumberToCurrency(e.price)}</p>
+                        <p>원</p>
+                      </span>
                     </div>
 
-                    <div className='cart-button-box'>
-                      <button className='add-cart'
-                              onClick={addCartHandler}
-                              value={e.item_no}
-                      >
-                        +
-                      </button>
-                      <button className='subtract-cart'
-                              onClick={subtractCartHandler}
-                              value={e.item_no}
-                      >
-                        -
-                      </button>
+                    <div className='button-box'>
+                      <button
+                        className='add-cart'
+                        onClick={addCartHandler}
+                        value={e.item_no}
+                      />
                     </div>
-
                   </div>
                 </li>
               )
@@ -170,7 +153,9 @@ const ProductsPage: NextPageWithLayout = () => {
         </ul>
 
         <Link href='cart'>
-          <div >장바구니로 이동</div>
+          <div onClick={() => dispatch(initialize(productList))}>
+            장바구니로 이동
+          </div>
         </Link>
       </ProductsPageContainer>
     </>

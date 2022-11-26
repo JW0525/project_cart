@@ -4,21 +4,20 @@ import React from "react";
 import {ProductState} from "../../../store/cartSlice";
 
 const CartTable = (props: {
-  products: ProductState[];
+  productList: ProductState[];
   handleAddProduct: Function;
   handleAddAllProduct: Function;
   handleProductCount: Function;
 }) => {
-  const { products, handleAddProduct, handleAddAllProduct, handleProductCount } = props;
+  const { productList, handleAddProduct, handleAddAllProduct, handleProductCount } = props;
 
-  console.log(products);
   return (
     <table className='cart-table'>
       <thead>
       <tr>
         <td>
           <CheckBoxWrapper
-            isChecked={products.every(product => product.isSellYn)}
+            isChecked={productList.every(product => product.isSellYn)}
             callback={handleAddAllProduct}
           />
         </td>
@@ -30,12 +29,12 @@ const CartTable = (props: {
       </thead>
       <tbody>
       {
-        products.map((product: any, idx: number) =>
+        productList.map((product: any, idx: number) =>
           <tr key={idx}>
             <CartTableProducts
               product={product}
               handleClick={handleAddProduct}
-              handleCount={handleProductCount}
+              handleProductCount={handleProductCount}
               idx={idx}
             />
           </tr>

@@ -1,8 +1,6 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent } from "react";
 import styled from "@emotion/styled";
 import uiCss from "../../styles/uiCss";
-import getData from "@/lib/getData";
-import {API} from "../../config";
 import {border, palette} from "../../styles/baseStyle";
 import CartTable from "./components/CartTable";
 import Head from "next/head";
@@ -144,12 +142,9 @@ const CartPageContainer = styled.div`
 }`
 
 const CartPage = () => {
-  const { data: productData, isLoading, isError } = getData(`${API.PRODUCTS}`);
   const dispatch = useDispatch();
   const cart = useSelector(getCartData);
-  const { products } = cart;
-
-  if (isLoading) return <></>
+  const { productList } = cart;
 
   const handleAddProduct = (e: ChangeEvent<HTMLInputElement>) => {
     const clickedProductItemNo = Number(e.currentTarget.value);
@@ -179,7 +174,7 @@ const CartPage = () => {
 
       <CartPageContainer>
         <CartTable
-          products={products}
+          productList={productList}
           handleAddProduct={handleAddProduct}
           handleAddAllProduct={handleAddAllProduct}
           handleProductCount={handleProductCount}
@@ -207,7 +202,6 @@ const CartPage = () => {
 
       </CartPageContainer>
     </>
-
   )
 };
 

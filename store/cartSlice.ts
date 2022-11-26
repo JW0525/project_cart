@@ -6,18 +6,18 @@ export interface ProductState {
   item_no: number,
   price: number,
   score: number,
-  count?: number,
-  isSellYn: boolean
+  isSellYn: boolean,
+  count?: number
 }
 
 export interface CartState {
-  products: ProductState[],
+  productList: ProductState[],
   totalAmounts: number
   coupon?: string
 }
 
 const initialState: CartState = {
-  products: [],
+  productList: [],
   totalAmounts: 0,
   coupon: ''
 }
@@ -26,56 +26,49 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addCartProducts: (state, action) => {
-      const { product, item_no } = action.payload;
+    initialize: (state, action: PayloadAction<any>) => {
+      const { productList } = action.payload;
 
-      if (state.products.every(product => product.item_no !== item_no)) {
-        state.products.push({
-          count: 1,
-          isSellYn: true,
-          ...product
-        });
+      const newProductList = [];
+
+      for (let i in productList) {
+        newProductList.push({
+          count: 0,
+          ...productList[i]
+        })
       }
+
+      state.productList = newProductList;
     },
-
-    subtractCartProducts: (state, action) => {
-      const { item_no } = action.payload;
-
-      state.products = state.products.filter(product => {
-        return product.item_no !== item_no
-      })
-    },
-
-
     setProductSellYn: (state, action) => {
-      const { products } = state;
+      const { productList } = state;
 
-      for (let i in products) {
-        if (products[i].item_no == action.payload) {
-          products[i].isSellYn = !products[i].isSellYn;
+      for (let i in productList) {
+        if (productList[i].item_no == action.payload) {
+          productList[i].isSellYn = !productList[i].isSellYn;
         }
       }
     },
 
     setAllProductSellYn: (state) => {
-      const { products } = state;
+      const { productList } = state;
 
-      if (products.every(product => product.isSellYn === true)) {
-        for (let i in products) {
-          products[i].isSellYn = false;
+      if (productList.every(product => product.isSellYn === true)) {
+        for (let i in productList) {
+          productList[i].isSellYn = false;
         }
       } else {
-        for (let i in products) {
-          products[i].isSellYn = true;
+        for (let i in productList) {
+          productList[i].isSellYn = true;
         }
       }
     },
 
     addProductCount: (state, action) => {
-      const { products } = state;
+      const { productList } = state;
       const { item_no, type } = action.payload;
 
-      const product = products.find(product => {
+      const product = productList.find(product => {
         return product.item_no === item_no;
       });
 
@@ -98,8 +91,7 @@ const { reducer, actions } = cartSlice;
 export default reducer;
 
 export const {
-  addCartProducts,
-  subtractCartProducts,
+  initialize,
   setProductSellYn,
   setAllProductSellYn,
   addProductCount
