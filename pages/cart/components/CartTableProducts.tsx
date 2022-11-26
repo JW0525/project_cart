@@ -4,19 +4,18 @@ import React from "react";
 
 const CartTableProducts = (props: {
   product: any;
-  orderData: any;
-  clickHandler: Function;
-  countHandler: Function;
+  handleClick: Function;
+  handleCount: Function;
   idx: number;
 }) => {
-  const { product, orderData, clickHandler, countHandler, idx } = props;
+  const { product, handleClick, handleCount, idx } = props;
 
   return (
     <>
       <td>
         <CheckBoxWrapper
-          isChecked={orderData.includes(product)}
-          callback={clickHandler}
+          isChecked={product.isSellYn}
+          callback={handleClick}
           value={product.item_no}
         />
       </td>
@@ -40,19 +39,13 @@ const CartTableProducts = (props: {
       <td className='count'>
         <div
           className='button-box'
-          onClick={(e) => countHandler(e)}
+          onClick={(e) => handleCount(e)}
         >
-          <button
-            data-item={product.item_no}
-            data-button-type={'subtract'}
-          >
+          <button data-item={product.item_no} data-button-type={'subtract'}>
             +
           </button>
-          <div>1</div>
-          <button
-            data-item={product.item_no}
-            data-button-type={'add'}
-          >
+          <div>{product.count}</div>
+          <button data-item={product.item_no} data-button-type={'add'}>
             +
           </button>
         </div>

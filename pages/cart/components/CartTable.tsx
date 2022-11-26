@@ -1,25 +1,25 @@
 import CheckBoxWrapper from "@/components/common/CheckBox";
 import CartTableProducts from "./CartTableProducts";
 import React from "react";
-import { ProductState } from "../../../store/productsSlice";
+import {ProductState} from "../../../store/cartSlice";
 
 const CartTable = (props: {
-  array: ProductState[];
-  orderData: ProductState[];
-  addProductHandler: Function;
-  addAllProductHandler: Function;
-  countHandler: Function;
+  products: ProductState[];
+  handleAddProduct: Function;
+  handleAddAllProduct: Function;
+  handleProductCount: Function;
 }) => {
-  const { array, orderData, addProductHandler, addAllProductHandler, countHandler } = props;
+  const { products, handleAddProduct, handleAddAllProduct, handleProductCount } = props;
 
+  console.log(products);
   return (
     <table className='cart-table'>
       <thead>
       <tr>
         <td>
           <CheckBoxWrapper
-            isChecked={array.length === orderData.length}
-            callback={addAllProductHandler}
+            isChecked={products.every(product => product.isSellYn)}
+            callback={handleAddAllProduct}
           />
         </td>
         <td>상품 정보</td>
@@ -30,13 +30,12 @@ const CartTable = (props: {
       </thead>
       <tbody>
       {
-        array!.map((product: any, idx: number) =>
+        products.map((product: any, idx: number) =>
           <tr key={idx}>
             <CartTableProducts
               product={product}
-              orderData={orderData}
-              clickHandler={addProductHandler}
-              countHandler={countHandler}
+              handleClick={handleAddProduct}
+              handleCount={handleProductCount}
               idx={idx}
             />
           </tr>

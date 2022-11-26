@@ -6,10 +6,9 @@ import {API} from "../../config";
 import {border, palette} from "../../styles/baseStyle";
 import CartTable from "./components/CartTable";
 import Head from "next/head";
-import {ProductState} from "../../store/productsSlice";
-
-
-
+import {getCartData} from "../../store/cartSelector";
+import {useDispatch, useSelector} from "react-redux";
+import {addProductCount, setAllProductSellYn, setProductSellYn} from "../../store/cartSlice";
 
 const CartPageContainer = styled.div`
   ${uiCss.flexColumn.center}
@@ -146,82 +145,30 @@ const CartPageContainer = styled.div`
 
 const CartPage = () => {
   const { data: productData, isLoading, isError } = getData(`${API.PRODUCTS}`);
-  const [orderData, setOrderData] = useState<ProductState[]>([]);
-  const [productCount, setProductCount] = useState<any>([]);
-
-
-
-
+  const dispatch = useDispatch();
+  const cart = useSelector(getCartData);
+  const { products } = cart;
 
   if (isLoading) return <></>
 
-
-  const test = productData[0];
-  const test2 = productData[2];
-  const test3 = productData[3];
-
-  // 나중에 cartData 로 대체
-  const array: any = [];
-  array.push(test, test2, test3);
-
-
-
-
-
-
-  const productCountList: any = [];
-
-  for (let i in array) {
-    const { item_no } = array[i];
-    productCountList.push({
-      count: 1,
-      item_no: item_no
-    })
-  }
-
-
-
-
-
-
-  // order 에 상품 추가하는 함수
-  const addProductHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleAddProduct = (e: ChangeEvent<HTMLInputElement>) => {
     const clickedProductItemNo = Number(e.currentTarget.value);
-    const clickedProduct: ProductState = productData.find((e: any) => {
-      return e.item_no === clickedProductItemNo
-    });
-
-    if (orderData.includes(clickedProduct)) {
-      const newOrderData = orderData.filter((data: ProductState) => {
-        return data.item_no !== clickedProductItemNo
-      });
-      setOrderData([...newOrderData]);
-
-    } else {
-      setOrderData([clickedProduct, ...orderData]);
-    }
+    dispatch(setProductSellYn(clickedProductItemNo));
   };
 
-
-
-  // order 에 전체 상품 추가하는 함수
-  const addAllProductHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    if (array.length === orderData.length) {
-      setOrderData([]);
-    } else {
-      setOrderData([...array]);
-    }
+  const handleAddAllProduct = () => {
+    dispatch(setAllProductSellYn());
   }
 
-
-
-
-
-  const countHandler = (e: React.MouseEvent)  => {
+  const handleProductCount = (e: React.MouseEvent)  => {
     const clickedProductItemNo = Number((e.target as HTMLSpanElement).getAttribute('data-item'));
     const buttonType = (e.target as HTMLSpanElement).getAttribute('data-button-type');
-  }
 
+    dispatch(addProductCount({
+      item_no: clickedProductItemNo,
+      type: buttonType
+    }))
+  }
 
   return (
     <>
@@ -232,11 +179,10 @@ const CartPage = () => {
 
       <CartPageContainer>
         <CartTable
-          array={array}
-          orderData={orderData}
-          addProductHandler={addProductHandler}
-          addAllProductHandler={addAllProductHandler}
-          countHandler={countHandler}
+          products={products}
+          handleAddProduct={handleAddProduct}
+          handleAddAllProduct={handleAddAllProduct}
+          handleProductCount={handleProductCount}
         />
 
         <table className='order-table'>

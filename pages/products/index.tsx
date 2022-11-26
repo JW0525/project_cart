@@ -1,4 +1,4 @@
-import React, {ChangeEvent, ReactElement, useState} from "react";
+import React, { ReactElement } from "react";
 import getData from "@/lib/getData";
 import { API } from "../../config";
 import styled from "@emotion/styled";
@@ -9,9 +9,9 @@ import textCss from "../../styles/textCss";
 import { NumberToCurrency } from "../../utils/regExpression";
 import Head from "next/head";
 import {useDispatch, useSelector} from "react-redux";
-import {addCartProducts, subtractCartProducts, } from "../../store/cartSlice";
-import {ProductState} from "../../store/productsSlice";
+import {addCartProducts, ProductState, subtractCartProducts,} from "../../store/cartSlice";
 import {getCartData} from "../../store/cartSelector";
+import Link from "next/link";
 
 const ProductsPageContainer = styled.div`
   width: 100%;
@@ -91,11 +91,9 @@ const ProductsPageContainer = styled.div`
 const ProductsPage: NextPageWithLayout = () => {
   const { data, isLoading, isError } = getData(`${API.PRODUCTS}`);
   const dispatch = useDispatch();
-  const cart = useSelector(getCartData)
+  const cart = useSelector(getCartData);
 
-
-
-  if (!data) return <></>
+  if (isLoading) return <></>
 
   const sortedData = data.sort(function(a: any,b: any) {
     return b.score - a.score;
@@ -111,7 +109,6 @@ const ProductsPage: NextPageWithLayout = () => {
       item_no: clickedProductItemNo,
       product: clickedProduct
     }));
-
   }
 
   const subtractCartHandler = (e: any) => {
@@ -122,7 +119,6 @@ const ProductsPage: NextPageWithLayout = () => {
     }));
   }
 
-  console.log(cart);
 
   return (
     <>
@@ -172,6 +168,10 @@ const ProductsPage: NextPageWithLayout = () => {
             })
           }
         </ul>
+
+        <Link href='cart'>
+          <div >장바구니로 이동</div>
+        </Link>
       </ProductsPageContainer>
     </>
   )
