@@ -4,9 +4,17 @@ import { API } from "../../config";
 import styled from "@emotion/styled";
 import { setResponsive } from "../../styles/setResponsive";
 import { NextPageWithLayout } from "../_app";
-import SideBarLayout from "@/components/sideBarLayout";
+import SideBarLayout from "@/components/layout/sideBarLayout";
 import textCss from "../../styles/textCss";
 import { NumberToCurrency } from "../../utils/regExpression";
+
+export interface IProductData {
+  detail_image_url: string,
+  item_name: string,
+  item_no: number,
+  price: number,
+  score: number
+}
 
 const ProductsPageContainer = styled.div`
   width: 100%;

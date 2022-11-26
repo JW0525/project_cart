@@ -1,6 +1,6 @@
 import {FC, ReactNode} from "react";
 import styled from "@emotion/styled";
-import uiCss from "../styles/uiCss";
+import uiCss from "../../styles/uiCss";
 import NavBarLayout from "./navBarLayout";
 
 const LayoutContainer = styled.div`

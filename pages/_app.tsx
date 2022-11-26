@@ -2,7 +2,7 @@ import { ReactElement, ReactNode } from "react";
 import type { AppProps } from 'next/app'
 import { Global } from '@emotion/react';
 import global from "../styles/global";
-import { Layout } from "@/components/layout";
+import { Layout } from "@/components/layout/layout";
 import { NextPage } from "next";
 
 export type NextPageWithLayout = NextPage & {

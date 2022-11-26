@@ -12,6 +12,20 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/cart/components',
+        destination: '/cart',
+        permanent: true,
+      },
+      {
+        source: '/products/components',
+        destination: '/components',
+        permanent: true,
+      },
+    ];
+  },
 }
 
 module.exports = nextConfig

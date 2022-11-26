@@ -1,11 +1,11 @@
+import React, {ChangeEvent, useEffect, useState} from "react";
 import styled from "@emotion/styled";
-import React from "react";
 import uiCss from "../../styles/uiCss";
-import {setResponsive} from "../../styles/setResponsive";
 import getData from "@/lib/getData";
-import { API } from "../../config";
-import { border } from "../../styles/baseStyle";
-import {NumberToCurrency} from "../../utils/regExpression";
+import {API} from "../../config";
+import {border} from "../../styles/baseStyle";
+import {IProductData} from "../products";
+import CartTable from "./components/CartTable";
 
 const CartPageContainer = styled.div`
   ${uiCss.flexColumn.center}
@@ -18,7 +18,7 @@ const CartPageContainer = styled.div`
     border-bottom: ${border.grayMain.border};
 
     // cart table
-    &.table-cart {
+    &.cart-table {
       thead {
         tr {
           display: grid;
@@ -27,11 +27,13 @@ const CartPageContainer = styled.div`
           height: 70px;
 
           td {
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;         
           }
         }
       }
-
+      
       tbody {
         tr {
           display: grid;
@@ -61,7 +63,7 @@ const CartPageContainer = styled.div`
                 }
               }
 
-              .info-box {
+              .info-wrapper {
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
@@ -78,7 +80,7 @@ const CartPageContainer = styled.div`
     }
     
     // order table
-    &.table-order {
+    &.order-table {
       thead {
         tr {
           display: grid;
@@ -112,71 +114,74 @@ const CartPageContainer = styled.div`
 
 const CartPage = () => {
   const { data: productData, isLoading, isError } = getData(`${API.PRODUCTS}`);
+  const [orderData, setOrderData] = useState<IProductData[]>([]);
+
   if (!productData) return <></>
 
-  const test = productData[1];
-  console.log(productData[1]);
+  const test = productData[0];
+  const test2 = productData[2];
+  const test3 = productData[3];
+
+  // 나중에 cartData 로 대체
+  const array: any = [];
+  array.push(test, test2, test3);
+
+
+
+  // order 에 상품 추가하는 함수
+  const addHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const clickedProductItemNo = Number(e.currentTarget.value);
+    const clickedProduct: IProductData = productData.find((e: any) => {
+      return e.item_no === clickedProductItemNo
+    });
+
+    if (orderData.includes(clickedProduct)) {
+      const newOrderData = orderData.filter((data: IProductData) => {
+        return data.item_no !== clickedProductItemNo
+      });
+      setOrderData([...newOrderData]);
+    } else {
+      setOrderData([clickedProduct, ...orderData]);
+    }
+  };
+
+  const addAllHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    if (array.length === orderData.length) {
+      setOrderData([]);
+    } else {
+      setOrderData([...array]);
+    }
+  }
+
   return (
     <CartPageContainer>
+      <CartTable
+        array={array}
+        orderData={orderData}
+        addHandler={addHandler}
+        addAllHandler={addAllHandler}
+      />
 
-
-
-
-
-        <table className='table-cart'>
-          <thead>
+      <table className='order-table'>
+        <thead>
           <tr>
-            <td>
-              <div className='checkbox-wrapper'>2</div>
-            </td>
-            <td>상품 정보</td>
-            <td>수량</td>
-            <td>주문금액</td>
-            <td>배송비</td>
+            <td>총 주문금액</td>
+            <td>총 배송비</td>
+            <td>총 결제금액</td>
           </tr>
-          </thead>
+        </thead>
 
-          <tbody>
+        <tbody>
           <tr>
             <td>39,900원</td>
-            <td  className='product-info'>
-              <div className='image-wrapper'>
-                <img src={test.detail_image_url} />
-              </div>
-              <div className='info-box'>
-                <h1>{test.item_name}</h1>
-                <span>
-                <p>{NumberToCurrency(test.price)}</p>
-                <p>원</p>
-              </span>
-              </div>
-            </td>
+            <td>+</td>
             <td>39,900원</td>
             <td>+</td>
             <td>39,900원</td>
           </tr>
-          </tbody>
-        </table>
+        </tbody>
+      </table>
 
-        <table className='table-order'>
-          <thead>
-            <tr>
-              <td>총 주문금액</td>
-              <td>총 배송비</td>
-              <td>총 결제금액</td>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td>39,900원</td>
-              <td>+</td>
-              <td>39,900원</td>
-              <td>+</td>
-              <td>39,900원</td>
-            </tr>
-          </tbody>
-        </table>
     </CartPageContainer>
   )
 };

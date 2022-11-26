@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { palette } from "../styles/baseStyle";
+import { palette } from "../../styles/baseStyle";
 
 const NavBarContainer = styled.div`
   width: 100vw;
