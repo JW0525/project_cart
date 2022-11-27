@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import {backgroundImages} from "../../styles/baseStyle";
 
 const CheckBoxLayout = styled.label`
   > input {
@@ -7,7 +8,7 @@ const CheckBoxLayout = styled.label`
   }
 
   & > input:checked ~ span {
-    background-color: green;
+    ${backgroundImages.icon('check-box-checked.png')};
   }
 
   > span.icon {
@@ -15,7 +16,7 @@ const CheckBoxLayout = styled.label`
     padding: 0 2px;
     width: 20px;
     height: 20px;
-    background-color: blue;
+    ${backgroundImages.icon('check-box-non.png')};
   }
 `;
 

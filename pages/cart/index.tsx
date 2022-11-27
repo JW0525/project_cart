@@ -10,11 +10,13 @@ import HeadComponent from "@/components/common/Head";
 import StepBox from "./components/StepBox";
 import textCss from "../../styles/textCss";
 import Link from "next/link";
+import CheckButton from "@/components/common/CheckButton";
 
 const CartPageContainer = styled.div`
   ${uiCss.flexColumn.custom('flex-start', 'center')}
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  margin-bottom: 300px;
   
   .step-box {
     display: flex;
@@ -43,16 +45,25 @@ const CartPageContainer = styled.div`
       ${textCss.gray20Medium};
       font-size: 32px;
     }
+  }
+  
+  .table-container {
+    width: 100%;
+    margin-bottom: 150px;
     
-    button {
-      width: 400px;
-      height: 70px;
-      ${textCss.gray25Bold};
-      font-family: Campton-Semi-Bold, sans-serif;
-      ${border.grayMedium}
+    .delete-btn-box {
+      margin-top: 30px;
       
-      &:hover {
-        color: #FF4800;
+      .button-wrapper {
+        display: flex;
+        grid-column-gap: 10px;
+      }
+      
+      button {
+        width: 128px;
+        height: 40px;
+        ${textCss.gray15Medium};
+        ${border.grayMedium};
       }
     }
   }
@@ -183,6 +194,18 @@ const CartPageContainer = styled.div`
       }
     }
   }
+  
+  .button-container {
+    display: flex;
+    grid-column-gap: 10px;
+    
+     button {
+       &.check-out {
+         background-color: ${palette.common.black};
+         color: ${palette.common.white};
+       }
+    }
+  }
 `
 
 const CartPage = () => {
@@ -220,37 +243,66 @@ const CartPage = () => {
           !productList.length ? (
             <div className='empty-cart'>
               <p>장바구니에 담은 상품이 없습니다.</p>
-              <Link href='products'>
-                <button>CONTINUE SHOPPING</button>
+              <Link className='link' href='products'>
+                <CheckButton
+                  type='shopping'
+                  text='CONTINUE SHOPPING'
+                />
               </Link>
             </div>
           ) : (
             <>
-              <CartTable
-                productList={productList}
-                handleAddProduct={handleAddProduct}
-                handleAddAllProduct={handleAddAllProduct}
-                handleProductCount={handleProductCount}
-              />
-              <table className='order-table'>
-                <thead>
-                <tr>
-                <td>총 주문금액</td>
-                <td>총 배송비</td>
-                <td>총 결제금액</td>
-                </tr>
-                </thead>
+              <div className='table-container'>
+                <CartTable
+                  productList={productList}
+                  handleAddProduct={handleAddProduct}
+                  handleAddAllProduct={handleAddAllProduct}
+                  handleProductCount={handleProductCount}
+                />
+                <div className='delete-btn-box'>
+                  <div className='button-wrapper'>
+                    <button>선택상품 삭제</button>
+                    <button>전체상품 삭제</button>
+                  </div>
+                </div>
+              </div>
 
-                <tbody>
-                <tr>
-                <td>39,900원</td>
-                <td>+</td>
-                <td>39,900원</td>
-                <td>+</td>
-                <td>39,900원</td>
-                </tr>
-                </tbody>
-              </table>
+              <div className='table-container'>
+                <table className='order-table'>
+                  <thead>
+                  <tr>
+                    <td>총 주문금액</td>
+                    <td>총 배송비</td>
+                    <td>총 결제금액</td>
+                  </tr>
+                  </thead>
+
+                  <tbody>
+                  <tr>
+                    <td>39,900원</td>
+                    <td>+</td>
+                    <td>39,900원</td>
+                    <td>+</td>
+                    <td>39,900원</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className='button-container'>
+                <Link className='link' href='products'>
+                  <CheckButton
+                    type='shopping'
+                    text='CONTINUE SHOPPING'
+                  />
+                </Link>
+                <Link className='link' href='products'>
+                  <CheckButton
+                    type='check-out'
+                    text='CHECK OUT'
+                  />
+                </Link>
+              </div>
             </>
           )
         }
