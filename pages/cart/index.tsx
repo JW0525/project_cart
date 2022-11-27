@@ -3,17 +3,60 @@ import styled from "@emotion/styled";
 import uiCss from "../../styles/uiCss";
 import {border, palette} from "../../styles/baseStyle";
 import CartTable from "./components/CartTable";
-import Head from "next/head";
 import {getCartData} from "../../store/cartSelector";
 import {useDispatch, useSelector} from "react-redux";
 import {addProductCount, setAllProductSellYn, setProductSellYn} from "../../store/cartSlice";
+import HeadComponent from "@/components/common/Head";
+import StepBox from "./components/StepBox";
+import textCss from "../../styles/textCss";
+import Link from "next/link";
 
 const CartPageContainer = styled.div`
-  ${uiCss.flexColumn.center}
+  ${uiCss.flexColumn.custom('flex-start', 'center')}
   width: 100%;
   height: 100vh;
-  //margin-top: 300px;
+  
+  .step-box {
+    display: flex;
+    grid-column-gap: 10px;
+    padding: 10px 0 90px;
     
+    p {
+      font-family: Campton-Medium, sans-serif;
+      color: ${palette.gray.lightDD};
+      
+      &.selected {
+        color: ${palette.gray.main};
+      }
+    }
+  }
+  
+  .empty-cart {
+    ${uiCss.flexColumn.center};
+    grid-row-gap: 50px;
+    width: 100%;
+    padding: 100px 0;
+    border-top: ${border.grayMain4x.border};
+    border-bottom: ${border.grayMain.border};
+    
+    p {
+      ${textCss.gray20Medium};
+      font-size: 32px;
+    }
+    
+    button {
+      width: 400px;
+      height: 70px;
+      ${textCss.gray25Bold};
+      font-family: Campton-Semi-Bold, sans-serif;
+      ${border.grayMedium}
+      
+      &:hover {
+        color: #FF4800;
+      }
+    }
+  }
+  
   table {
     width: 100%;
     border-top: ${border.grayMain4x.border};
@@ -140,14 +183,12 @@ const CartPageContainer = styled.div`
       }
     }
   }
-}`
+`
 
 const CartPage = () => {
   const dispatch = useDispatch();
   const cart = useSelector(getCartData);
   const { productList } = cart;
-
-  console.log(cart);
 
   const handleAddProduct = (e: ChangeEvent<HTMLInputElement>) => {
     const clickedProductItemNo = Number(e.currentTarget.value);
@@ -170,39 +211,49 @@ const CartPage = () => {
 
   return (
     <>
-      <Head>
-        <title>장바구니 페이지</title>
-        <meta name="cart" content="장바구니 페이지입니다." />
-      </Head>
+      <HeadComponent title='장바구니 페이지' name='cart' content='장바구니 페이지입니다.' />
 
       <CartPageContainer>
-        <CartTable
-          productList={productList}
-          handleAddProduct={handleAddProduct}
-          handleAddAllProduct={handleAddAllProduct}
-          handleProductCount={handleProductCount}
-        />
+        <StepBox />
 
-        <table className='order-table'>
-          <thead>
-          <tr>
-            <td>총 주문금액</td>
-            <td>총 배송비</td>
-            <td>총 결제금액</td>
-          </tr>
-          </thead>
+        {
+          !productList.length ? (
+            <div className='empty-cart'>
+              <p>장바구니에 담은 상품이 없습니다.</p>
+              <Link href='products'>
+                <button>CONTINUE SHOPPING</button>
+              </Link>
+            </div>
+          ) : (
+            <>
+              <CartTable
+                productList={productList}
+                handleAddProduct={handleAddProduct}
+                handleAddAllProduct={handleAddAllProduct}
+                handleProductCount={handleProductCount}
+              />
+              <table className='order-table'>
+                <thead>
+                <tr>
+                <td>총 주문금액</td>
+                <td>총 배송비</td>
+                <td>총 결제금액</td>
+                </tr>
+                </thead>
 
-          <tbody>
-          <tr>
-            <td>39,900원</td>
-            <td>+</td>
-            <td>39,900원</td>
-            <td>+</td>
-            <td>39,900원</td>
-          </tr>
-          </tbody>
-        </table>
-
+                <tbody>
+                <tr>
+                <td>39,900원</td>
+                <td>+</td>
+                <td>39,900원</td>
+                <td>+</td>
+                <td>39,900원</td>
+                </tr>
+                </tbody>
+              </table>
+            </>
+          )
+        }
       </CartPageContainer>
     </>
   )

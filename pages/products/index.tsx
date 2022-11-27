@@ -13,8 +13,9 @@ import {initialize, ProductState } from "../../store/cartSlice";
 import Link from "next/link";
 import { addCartProducts } from "../../store/productsSlice";
 import { getProductList } from "../../store/productsSelector";
-import { backgroundImages } from "../../styles/baseStyle";
+import { backgroundImages, palette, radius } from "../../styles/baseStyle";
 import CartAnimation from "@/components/common/Animation";
+import HeadComponent from "@/components/common/Head";
 
 const ProductsPageContainer = styled.div`
   width: 100%;
@@ -95,17 +96,20 @@ const ProductsPageContainer = styled.div`
             color: #5d5d5d;
           }
           
-          span {
+          div {
             display: flex;
+            align-items: center;
+            grid-column-gap: 5px;
             
             p {
               ${textCss.gray14Bold}
-
-              :nth-of-type(2) {
-                padding-left: 2px;
-                font-size: 12px;
-                font-weight: 400;
-              }
+            }
+            
+            span {
+              padding: 2px 4px;
+              background-color: ${palette.gray.lightEE};
+              ${radius.micro};
+              ${textCss.gray12Medium}
             }
           }
         }
@@ -168,10 +172,7 @@ const ProductsPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <Head>
-        <title>상품 페이지</title>
-        <meta name="products" content="상품 페이지입니다." />
-      </Head>
+      <HeadComponent title='상품 페이지' name='products' content='상품 페이지입니다.' />
 
       <ProductsPageContainer>
         <ul>
@@ -179,6 +180,8 @@ const ProductsPage: NextPageWithLayout = () => {
             sortedData.map((product: ProductState, idx: number) => {
               const isClickedProduct = clickedProductItemNo === product.item_no;
               const isListHavingProduct = productList.some(item => item.item_no === product.item_no);
+
+              console.log(product)
 
               return (
                 <li key={idx}>
@@ -205,10 +208,12 @@ const ProductsPage: NextPageWithLayout = () => {
 
                     <div className='info-box'>
                       <h1>{product.item_name}</h1>
-                      <span>
+                      <div>
                         <p>{NumberToCurrency(product.price)}</p>
-                        <p>원</p>
-                      </span>
+                        {
+                          (product.availableCoupon !== false) && <span>쿠폰 사용 가능</span>
+                        }
+                      </div>
                     </div>
 
                     <button

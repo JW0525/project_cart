@@ -1,7 +1,7 @@
 import CheckBoxWrapper from "@/components/common/CheckBox";
 import CartTableProducts from "./CartTableProducts";
 import React from "react";
-import {ProductState} from "../../../store/cartSlice";
+import { ProductState } from "../../../store/cartSlice";
 
 const CartTable = (props: {
   productList: ProductState[];

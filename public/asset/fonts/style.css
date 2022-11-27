@@ -12,3 +12,13 @@
   font-family: 'Campton-Book';
   src: url('CamptonBook.otf') format('opentype');
 }
+
+@font-face {
+  font-family: 'Campton-Extra-Bold';
+  src: url('CamptonExtraBold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Campton-Semi-Bold';
+  src: url('CamptonSemiBold.otf') format('opentype');
+}

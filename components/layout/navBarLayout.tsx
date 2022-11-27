@@ -25,7 +25,7 @@ const NavBarContainer = styled.div<{ scrollY: number }>`
       
       li {
         ${textCss.gray35Bold}
-        font-family: "Campton-Black", sans-serif;
+        font-family: "Campton-Extra-Bold", sans-serif;
       }
     }
     
@@ -33,7 +33,7 @@ const NavBarContainer = styled.div<{ scrollY: number }>`
       cursor: pointer;
       
       li {
-        font-family: "Campton-Medium", sans-serif;
+        font-family: Campton-Semi-Bold, sans-serif;
       }
     }
   }

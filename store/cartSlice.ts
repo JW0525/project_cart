@@ -7,6 +7,7 @@ export interface ProductState {
   price: number,
   score: number,
   isSellYn: boolean,
+  availableCoupon?: boolean,
   count?: number
 }
 
