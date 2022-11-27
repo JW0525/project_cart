@@ -20,14 +20,14 @@ const ButtonContainer = styled.button`
 const CheckButton = (props: {
   text: string,
   type: string,
-  callback?: Function
+  callback?: any
 }) => {
   const { text, type, callback } = props;
 
   return (
     <ButtonContainer
       className={`check-button ${type}`}
-      onClick={() => callback}
+      onClick={callback}
     >
       {text}
     </ButtonContainer>

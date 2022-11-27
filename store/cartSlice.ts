@@ -36,7 +36,8 @@ const cartSlice = createSlice({
 
       for (let i in productList) {
         newProductList.push({
-          count: 0,
+          count: 1,
+          isSellYn: true,
           ...productList[i]
         })
       }

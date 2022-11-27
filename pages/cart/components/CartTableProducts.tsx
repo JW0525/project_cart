@@ -11,8 +11,6 @@ const CartTableProducts = (props: {
 }) => {
   const { product, handleClick, handleProductCount, idx } = props;
 
-  console.log(product)
-
   return (
     <>
       <td>
@@ -53,8 +51,8 @@ const CartTableProducts = (props: {
         </div>
       </td>
 
-      <td>39,900원</td>
-      <td>39,900원</td>
+      <td>{NumberToCurrency(product.price * product.count!)}</td>
+      <td>조건부 무료 배송</td>
     </>
   )
 }

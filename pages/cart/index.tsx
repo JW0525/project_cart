@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import styled from "@emotion/styled";
 import uiCss from "../../styles/uiCss";
 import {border, palette} from "../../styles/baseStyle";
@@ -12,6 +12,8 @@ import textCss from "../../styles/textCss";
 import Link from "next/link";
 import CheckButton from "@/components/common/CheckButton";
 import { synchronize } from "store/productsSlice";
+import getData from "@/lib/getData";
+import {API} from "../../config";
 
 const CartPageContainer = styled.div`
   ${uiCss.flexColumn.custom('flex-start', 'center')}
@@ -21,7 +23,9 @@ const CartPageContainer = styled.div`
   
   .step-box {
     display: flex;
+    justify-content: center;
     grid-column-gap: 10px;
+    min-width: 1024px;
     padding: 10px 0 90px;
     
     p {
@@ -112,6 +116,7 @@ const CartPageContainer = styled.div`
             &.product-info {
               display: grid;
               grid-template-columns: 120px 1fr;
+              min-width: 300px;
 
               .image-wrapper {
                 img {
@@ -125,6 +130,15 @@ const CartPageContainer = styled.div`
                 flex-direction: column;
                 align-items: flex-start;
                 padding: 20px;
+                
+                > h1 {
+                  display: block;
+                  white-space: normal;
+                  display: -webkit-box;
+                  -webkit-line-clamp: 2;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                }
 
                 > span {
                   display: flex;
@@ -210,9 +224,12 @@ const CartPageContainer = styled.div`
 `
 
 const CartPage = () => {
+  const { data: couponData, isLoading } = getData(`${API.COUPONS}`);
+
   const dispatch = useDispatch();
   const cart = useSelector(getCartData);
   const { productList } = cart;
+  const [totalAmounts, setTotalAmounts] = useState(0);
 
   const handleAddProduct = (e: ChangeEvent<HTMLInputElement>) => {
     const clickedProductItemNo = Number(e.currentTarget.value);
@@ -240,6 +257,48 @@ const CartPage = () => {
   const handleDeleteALlProduct = () => {
     dispatch(deleteAllProduct());
   }
+
+  const linkToProductsPage = () => {
+    dispatch(synchronize(productList))
+  }
+
+  const calculateAmounts = (coupon: any) => {
+
+    let totalAmount = 0;
+
+    if (coupon) {
+      const { type, discountAmount, discountRate } = coupon;
+
+      for (let i in productList) {
+        const { count, price, isSellYn, availableCoupon } = productList[i];
+        const isAvailableCoupon = availableCoupon === undefined;
+
+        // 선택되지 않은 상품은 계산하지 않는다.
+        if (isSellYn) {
+          // type 이 rate 이고, 쿠폰 적용이 가능한 상품이라면 discountRate 를 적용한다.
+          const multiply = (discountRate && isAvailableCoupon) ? (1 - discountRate * 0.01) : 1;
+
+          console.log((count as number * price * multiply))
+          totalAmount += (count as number * price * multiply);
+        }
+
+        //type 이 amount 인 경우, discountAmount 만큼 가격을 뺀다.
+      }
+      if (discountAmount) totalAmount -= discountAmount;
+    }
+
+    return totalAmount;
+  }
+
+  useEffect(() => {
+    if (couponData) {
+      const calculated = calculateAmounts(couponData[1]);
+
+      setTotalAmounts(calculated);
+    }
+
+  },[productList, couponData]);
+
 
   return (
     <>
@@ -289,11 +348,11 @@ const CartPage = () => {
 
                   <tbody>
                   <tr>
-                    <td>39,900원</td>
+                    <td>{totalAmounts}원</td>
                     <td>+</td>
-                    <td>39,900원</td>
+                    <td>0원</td>
                     <td>+</td>
-                    <td>39,900원</td>
+                    <td>{totalAmounts}원</td>
                   </tr>
                   </tbody>
                 </table>
@@ -304,7 +363,7 @@ const CartPage = () => {
                   <CheckButton
                     type='shopping'
                     text='CONTINUE SHOPPING'
-                    callback={dispatch(synchronize(productList))}
+                    callback={linkToProductsPage}
                   />
                 </Link>
                 <Link className='link' href='products'>
@@ -322,4 +381,4 @@ const CartPage = () => {
   )
 };
 
-export default CartPage
+export default CartPage;
