@@ -12,10 +12,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {initialize, ProductState } from "../../store/cartSlice";
 import Link from "next/link";
 import { addCartProducts } from "../../store/productsSlice";
-import { getProductList} from "../../store/productsSelector";
-import {backgroundImages} from "../../styles/baseStyle";
+import { getProductList } from "../../store/productsSelector";
+import { backgroundImages } from "../../styles/baseStyle";
 import CartAnimation from "@/components/common/Animation";
-import Cart from "../cart";
 
 const ProductsPageContainer = styled.div`
   width: 100%;
@@ -60,12 +59,25 @@ const ProductsPageContainer = styled.div`
           z-index: 5;
         }
         
-        .d {
+        .background {
           position: absolute;
           top: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           width: 100%;
           height: 100%;
-          background-color:rgba(0, 0, 0, 0.5);
+          background-color: rgba(0, 0, 0, 0.5);
+          
+          pre {
+            text-align: center;
+            color:rgba(256, 256, 256, 0.8);
+            font-size: 1rem;
+            
+            &.not-show {
+              visibility: hidden;
+            }
+          }
         }
       }
       
@@ -103,7 +115,14 @@ const ProductsPageContainer = styled.div`
           height: 30px;
           cursor: pointer;
           background-color: transparent;
-          ${backgroundImages.icon('add-cart.png')};
+          
+          &.add-product {
+            ${backgroundImages.icon('add-to-cart.png')};
+          }
+          
+          &.take-out-product {
+            ${backgroundImages.icon('take-out-from-cart.png')};
+          }
         }
       }
     }
@@ -119,7 +138,7 @@ const ProductsPage: NextPageWithLayout = () => {
 
   if (isLoading) return <></>
 
-  const sortedData = data.sort(function(a: any,b: any) {
+  const sortedData = data.sort(function(a: any, b: any) {
     return b.score - a.score;
   })
 
@@ -138,7 +157,7 @@ const ProductsPage: NextPageWithLayout = () => {
     }));
 
     // 리스트에 상품이 추가되지 않았다면 상품추가 애니메이션을 보여준다.
-    if (!productList.includes(clickedProduct)) {
+    if (productList.length !== 3 && !productList.includes(clickedProduct)) {
       setShowAnimation(true);
 
       setTimeout(() => {
@@ -167,13 +186,19 @@ const ProductsPage: NextPageWithLayout = () => {
                     <img src={product.detail_image_url} />
                     {
                       (showAnimation && isClickedProduct)
-                        &&
-                      <CartAnimation />
+                        && (
+                        <CartAnimation />
+                      )
                     }
                     {
                       (isListHavingProduct)
-                       &&
-                      <div className='d' />
+                       && (
+                        <div className='background'>
+                          <pre className={`${(showAnimation && isClickedProduct) && 'not-show'}`}>
+                            상품이 장바구니에<br />등록되었습니다.
+                          </pre>
+                        </div>
+                      )
                     }
                   </div>
                   <div className='description-container'>
@@ -187,6 +212,7 @@ const ProductsPage: NextPageWithLayout = () => {
                     </div>
 
                     <button
+                      className={`${isListHavingProduct ? 'take-out-product' : 'add-product'}`}
                       value={product.item_no}
                       onClick={addCartHandler}
                     />
