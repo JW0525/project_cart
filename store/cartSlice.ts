@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {getProductList} from "./productsSelector";
 
 export interface ProductState {
   detail_image_url: string,
@@ -65,6 +66,18 @@ const cartSlice = createSlice({
       }
     },
 
+    deleteProduct: (state, action) => {
+      const { productList } = state;
+
+      state.productList = productList.filter(product => {
+        return !product.isSellYn
+      });
+    },
+
+    deleteAllProduct: (state) => {
+      state.productList = [];
+    },
+
     addProductCount: (state, action) => {
       const { productList } = state;
       const { item_no, type } = action.payload;
@@ -84,7 +97,13 @@ const cartSlice = createSlice({
         default:
           break;
       }
-    },
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addDefaultCase((state, action) => {
+        // console.log(action);
+      });
   }
 })
 
@@ -95,5 +114,7 @@ export const {
   initialize,
   setProductSellYn,
   setAllProductSellYn,
+  deleteProduct,
+  deleteAllProduct,
   addProductCount
 } = actions;

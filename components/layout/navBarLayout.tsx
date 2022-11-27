@@ -62,9 +62,9 @@ const NavBarLayout = () => {
 
       <ul className='category-box sub'>
         {
-          mainCategoryList.map(category => {
+          mainCategoryList.map((category, idx) => {
             return (
-              <li>{category}</li>
+              <li key={idx}>{category}</li>
             )
           })
         }

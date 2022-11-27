@@ -5,7 +5,7 @@ import {border, palette} from "../../styles/baseStyle";
 import CartTable from "./components/CartTable";
 import {getCartData} from "../../store/cartSelector";
 import {useDispatch, useSelector} from "react-redux";
-import {addProductCount, setAllProductSellYn, setProductSellYn} from "../../store/cartSlice";
+import {addProductCount, deleteAllProduct, deleteProduct, setAllProductSellYn, setProductSellYn} from "../../store/cartSlice";
 import HeadComponent from "@/components/common/Head";
 import StepBox from "./components/StepBox";
 import textCss from "../../styles/textCss";
@@ -213,6 +213,8 @@ const CartPage = () => {
   const cart = useSelector(getCartData);
   const { productList } = cart;
 
+  console.log(productList);
+
   const handleAddProduct = (e: ChangeEvent<HTMLInputElement>) => {
     const clickedProductItemNo = Number(e.currentTarget.value);
     dispatch(setProductSellYn(clickedProductItemNo));
@@ -230,6 +232,14 @@ const CartPage = () => {
       item_no: clickedProductItemNo,
       type: buttonType
     }))
+  }
+
+  const handleDeleteProduct = () => {
+    dispatch(deleteProduct(productList));
+  }
+
+  const handleDeleteALlProduct = () => {
+    dispatch(deleteAllProduct());
   }
 
   return (
@@ -261,8 +271,9 @@ const CartPage = () => {
                 />
                 <div className='delete-btn-box'>
                   <div className='button-wrapper'>
-                    <button>선택상품 삭제</button>
-                    <button>전체상품 삭제</button>
+                    <button onClick={() => handleDeleteProduct()}>선택상품 삭제</button>
+                    <button onClick={handleDeleteALlProduct}>
+                      전체상품 삭제</button>
                   </div>
                 </div>
               </div>

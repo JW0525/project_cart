@@ -8,6 +8,8 @@ const rootReducer = combineReducers({
   productsSlice
 });
 
+export default rootReducer;
+
 export const store = configureStore({
   reducer: rootReducer
 })

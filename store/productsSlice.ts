@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {deleteAllProduct, deleteProduct} from "./cartSlice";
 
 export interface ProductState {
   detail_image_url: string,
@@ -38,7 +39,23 @@ const cartSlice = createSlice({
           product.item_no !== item_no
         )
       }
-    },
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(deleteAllProduct, (state, action) => {
+        state.productList = [];
+      })
+      .addCase(deleteProduct, (state, action) => {
+        const cartList = action.payload;
+
+        state.productList = cartList.filter((product: ProductState) => {
+          return !product.isSellYn;
+        });
+      })
+      .addDefaultCase((state, action) => {
+        // console.log(action);
+      });
   }
 })
 

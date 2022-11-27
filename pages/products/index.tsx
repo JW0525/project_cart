@@ -181,7 +181,7 @@ const ProductsPage: NextPageWithLayout = () => {
               const isClickedProduct = clickedProductItemNo === product.item_no;
               const isListHavingProduct = productList.some(item => item.item_no === product.item_no);
 
-              console.log(product)
+              // console.log(product)
 
               return (
                 <li key={idx}>

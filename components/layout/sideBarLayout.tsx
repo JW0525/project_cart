@@ -52,8 +52,11 @@ const SideBarLayout = (props: any) => {
         <button>BEST</button>
         <ul>
           {
-            categoryList.map((category) =>
-              <li className={`${category === selected && 'selected'}`}>
+            categoryList.map((category, index: number) =>
+              <li
+                className={`${category === selected && 'selected'}`}
+                key={index}
+              >
                 {category}
               </li>
             )
