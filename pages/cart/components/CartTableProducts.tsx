@@ -42,7 +42,7 @@ const CartTableProducts = (props: {
           onClick={(e) => handleProductCount(e)}
         >
           <button data-item={product.item_no} data-button-type={'subtract'}>
-            +
+            -
           </button>
           <div>{product.count}</div>
           <button data-item={product.item_no} data-button-type={'add'}>

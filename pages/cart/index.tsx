@@ -17,6 +17,7 @@ import {API} from "../../config";
 
 const CartPageContainer = styled.div`
   ${uiCss.flexColumn.custom('flex-start', 'center')}
+  position: relative;
   width: 100%;
   height: 100%;
   margin-bottom: 300px;
@@ -56,19 +57,28 @@ const CartPageContainer = styled.div`
     width: 100%;
     margin-bottom: 150px;
     
-    .delete-btn-box {
+    .manage-button-container {
+      display: flex;
+      justify-content: space-between;
       margin-top: 30px;
-      
-      .button-wrapper {
-        display: flex;
-        grid-column-gap: 10px;
-      }
-      
+
       button {
         width: 128px;
         height: 40px;
         ${textCss.gray15Medium};
         ${border.grayMedium};
+        background-color: ${palette.gray.main};
+        color: ${palette.common.white};
+      }
+      
+      .delete-button-wrapper {
+        display: flex;
+        grid-column-gap: 10px;
+        
+        > button {
+          background-color: ${palette.common.white};
+          color: ${palette.gray.main};
+        }
       }
     }
   }
@@ -210,7 +220,7 @@ const CartPageContainer = styled.div`
     }
   }
   
-  .button-container {
+  .check-button-container {
     display: flex;
     grid-column-gap: 10px;
     
@@ -223,8 +233,111 @@ const CartPageContainer = styled.div`
   }
 `
 
+const Modal = styled.div`
+  display: flex;
+  flex-direction: column;
+  grid-row-gap: 20px;
+  position: absolute;
+  top: calc(50% - 300px);
+  width: 500px;
+  padding: 30px;
+  background-color: ${palette.common.white};
+  ${border.grayLightDD};
+
+  .modal-title {
+    padding-bottom: 20px;
+    ${textCss.gray18Bold};
+    font-family: Campton-Semi-Bold, sans-serif;
+    border-bottom: ${border.grayLightDD.border};
+  }
+  
+  .modal-contents {
+    display: flex;
+    flex-direction: column;
+    grid-row-gap: 10px;
+    height: 100%;
+    
+    > div {
+      display: grid;
+      align-items: center;
+      grid-template-columns: 100px 1fr;
+    }
+    
+    .coupon-box {
+      width: 100%;
+
+
+      .coupon-dropdown {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        height: 45px;
+        ${border.grayLightDD};
+
+        ul {
+          //display: none;
+          position: absolute;
+          top: 40px;
+          left: -1px;
+          flex-direction: column;
+          width: 100.5%;
+          background-color: ${palette.common.white};
+          ${border.grayLightDD};
+          border-top-style: none !important;
+          ${textCss.gray12Medium};
+          z-index: 1;
+
+          li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+          }
+        }
+      }
+    }
+    
+    .mileage-input-wrapper {
+      display: grid;
+      grid-template-columns: 160px 80px 1fr;
+      grid-column-gap: 10px;
+      align-items: center;
+
+      > input {
+        height: 45px;
+        ${border.grayLightDD};
+      }
+      
+      > button {
+        height: 45px;
+        ${border.grayLightDD};
+        ${textCss.gray13Medium};
+        
+        &:disabled {
+          background-color: ${palette.gray.lightEE};
+
+        }
+      }
+
+      span {
+        display: flex;
+        flex-direction: column;
+        ${textCss.gray14Medium};
+
+        p {
+          ${textCss.gray14Bold};
+        }
+      }
+    }
+  }
+`
+
+
 const CartPage = () => {
   const { data: couponData, isLoading } = getData(`${API.COUPONS}`);
+  const [selectedCoupon, setSelectedCoupon] = useState('사용가능 쿠폰')
+
 
   const dispatch = useDispatch();
   const cart = useSelector(getCartData);
@@ -263,7 +376,6 @@ const CartPage = () => {
   }
 
   const calculateAmounts = (coupon: any) => {
-
     let totalAmount = 0;
 
     if (coupon) {
@@ -278,12 +390,11 @@ const CartPage = () => {
           // type 이 rate 이고, 쿠폰 적용이 가능한 상품이라면 discountRate 를 적용한다.
           const multiply = (discountRate && isAvailableCoupon) ? (1 - discountRate * 0.01) : 1;
 
-          console.log((count as number * price * multiply))
+          // 가격 * 개수 * 할인율 적용.
           totalAmount += (count as number * price * multiply);
         }
-
-        //type 이 amount 인 경우, discountAmount 만큼 가격을 뺀다.
       }
+      //type 이 amount 인 경우, discountAmount 만큼 가격을 뺀다.
       if (discountAmount) totalAmount -= discountAmount;
     }
 
@@ -292,20 +403,59 @@ const CartPage = () => {
 
   useEffect(() => {
     if (couponData) {
-      const calculated = calculateAmounts(couponData[1]);
+      // coupon 을 적용하지 않을 때에도 이 부분을 이용한다.
+      const calculated = calculateAmounts(couponData[0]);
 
       setTotalAmounts(calculated);
     }
+  },[productList]);
 
-  },[productList, couponData]);
+  const changeHandler = (e: any) => {
+    const value = e.target.innerHTML;
+    setSelectedCoupon(value);
+  }
 
-
+  const [showDropdown, setShowDropdown] = useState(false);
   return (
     <>
       <HeadComponent title='장바구니 페이지' name='cart' content='장바구니 페이지입니다.' />
 
       <CartPageContainer>
         <StepBox />
+        <Modal>
+          <p className='modal-title coupon'>쿠폰 / 마일리지</p>
+          <div className='modal-contents'>
+            <div className='coupon-box'>
+              <p>쿠폰</p>
+
+              <div
+                className='coupon-dropdown'
+                onClick={() => setShowDropdown(!showDropdown)}
+              >
+                <div>{selectedCoupon}</div>
+                {
+                  showDropdown &&
+                  <ul>
+                    <li onClick={changeHandler}>쿠폰1</li>
+                    <li onClick={changeHandler}>쿠폰2</li>
+                  </ul>
+                }
+
+              </div>
+
+
+
+            </div>
+            <div className='mileage-box'>
+              <p>마일리지</p>
+              <div className='mileage-input-wrapper'>
+                <input disabled={true} type='text'/>
+                <button disabled={true}>모두 사용</button>
+                <span>보유 마일리지&nbsp;<p>0p</p></span>
+              </div>
+            </div>
+          </div>
+        </Modal>
 
         {
           !productList.length ? (
@@ -327,13 +477,14 @@ const CartPage = () => {
                   handleAddAllProduct={handleAddAllProduct}
                   handleProductCount={handleProductCount}
                 />
-                <div className='delete-btn-box'>
-                  <div className='button-wrapper'>
+                <div className='manage-button-container'>
+                  <div className='delete-button-wrapper'>
                     <button onClick={() => handleDeleteProduct()}>선택상품 삭제</button>
-                    <button onClick={handleDeleteALlProduct}>
-                      전체상품 삭제</button>
+                    <button onClick={handleDeleteALlProduct}>전체상품 삭제</button>
                   </div>
+                  <button>쿠폰 적용하기</button>
                 </div>
+
               </div>
 
               <div className='table-container'>
@@ -358,12 +509,12 @@ const CartPage = () => {
                 </table>
               </div>
 
-              <div className='button-container'>
+              <div className='check-button-container'>
                 <Link className='link' href='products'>
                   <CheckButton
                     type='shopping'
                     text='CONTINUE SHOPPING'
-                    callback={linkToProductsPage}
+                    callback={ linkToProductsPage }
                   />
                 </Link>
                 <Link className='link' href='products'>
