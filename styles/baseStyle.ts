@@ -96,6 +96,12 @@ export const fontSizes = {
   f22: {
     fontSize: '22px'
   },
+  f23: {
+    fontSize: '23px'
+  },
+  f24: {
+    fontSize: '24px'
+  },
   f25: {
     fontSize: '25px'
   },

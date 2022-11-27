@@ -3,9 +3,24 @@ import { fontFamily, fontSizes, letterSpacing, palette } from './baseStyle';
 
 // bold(700) > medium(500) > thin(400) > regular(300)
 
-const gray25Bold = css`
+const gray35Bold = css`
   ${fontFamily.notoSans700};
   ${fontSizes.f35};
+  ${letterSpacing.main};
+  color: ${palette.gray.main};
+`;
+
+const gray25Bold = css`
+  ${fontFamily.notoSans700};
+  ${fontSizes.f25};
+  ${letterSpacing.main};
+  color: ${palette.gray.main};
+`;
+
+
+const gray23Bold = css`
+  ${fontFamily.notoSans700};
+  ${fontSizes.f23};
   ${letterSpacing.main};
   color: ${palette.gray.main};
 `;
@@ -259,6 +274,7 @@ const textCss = {
   gray20Medium,
   gray22Bold,
   gray25Bold,
+  gray35Bold,
 
   white11Medium,
   white13Bold,

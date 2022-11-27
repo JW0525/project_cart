@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'Campton-Black';
+  src: url('CamptonBlack.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Campton-Medium';
+  src: url('CamptonMedium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Campton-Book';
+  src: url('CamptonBook.otf') format('opentype');
+}

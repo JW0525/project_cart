@@ -31,6 +31,16 @@ const global = css`
     outline: 0 !important;
   }
 
+  button {
+    background: inherit;
+    border:none; 
+    box-shadow:none; 
+    border-radius:0; 
+    padding:0; 
+    overflow:visible; 
+    cursor:pointer
+  }
+
   ul,
   li {
     list-style: none;

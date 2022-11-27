@@ -6,6 +6,7 @@ import { Layout } from "@/components/layout/layout";
 import { NextPage } from "next";
 import {Provider} from "react-redux";
 import {store} from "../store/modules";
+import '/public/asset/fonts/style.css';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;

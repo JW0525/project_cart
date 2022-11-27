@@ -12,6 +12,7 @@ const CartPageContainer = styled.div`
   ${uiCss.flexColumn.center}
   width: 100%;
   height: 100vh;
+  //margin-top: 300px;
     
   table {
     width: 100%;

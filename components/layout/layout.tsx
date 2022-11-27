@@ -8,7 +8,6 @@ const LayoutContainer = styled.div`
   width: 100vw;
   height: 100%;
   padding: 0 50px;
-  //background-color: floralwhite;
   
   main {
     display: flex;
