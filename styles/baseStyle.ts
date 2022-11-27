@@ -98,6 +98,9 @@ export const fontSizes = {
   },
   f25: {
     fontSize: '25px'
+  },
+  f35: {
+    fontSize: '35px'
   }
 };
 

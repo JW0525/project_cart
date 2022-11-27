@@ -21,7 +21,6 @@ const global = css`
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: palegoldenrod;
   }
 
   select,

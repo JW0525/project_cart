@@ -5,7 +5,7 @@ import { fontFamily, fontSizes, letterSpacing, palette } from './baseStyle';
 
 const gray25Bold = css`
   ${fontFamily.notoSans700};
-  ${fontSizes.f25};
+  ${fontSizes.f35};
   ${letterSpacing.main};
   color: ${palette.gray.main};
 `;

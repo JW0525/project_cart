@@ -31,7 +31,7 @@ const cartSlice = createSlice({
         if (productList.length < 3) {
           state.productList.push(product);
         } else {
-          alert('3개까지만 선택이 가능합니다.')
+          alert('상품은 3개까지만 담을 수 있습니다.')
         }
       } else {
         state.productList = state.productList.filter(product =>
