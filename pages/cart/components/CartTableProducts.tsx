@@ -11,6 +11,8 @@ const CartTableProducts = (props: {
 }) => {
   const { product, handleClick, handleProductCount, idx } = props;
 
+  console.log(product)
+
   return (
     <>
       <td>

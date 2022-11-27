@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {getProductList} from "./productsSelector";
+import {synchronize} from "./productsSlice";
 
 export interface ProductState {
   detail_image_url: string,

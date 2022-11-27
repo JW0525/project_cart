@@ -11,6 +11,7 @@ import StepBox from "./components/StepBox";
 import textCss from "../../styles/textCss";
 import Link from "next/link";
 import CheckButton from "@/components/common/CheckButton";
+import { synchronize } from "store/productsSlice";
 
 const CartPageContainer = styled.div`
   ${uiCss.flexColumn.custom('flex-start', 'center')}
@@ -213,8 +214,6 @@ const CartPage = () => {
   const cart = useSelector(getCartData);
   const { productList } = cart;
 
-  console.log(productList);
-
   const handleAddProduct = (e: ChangeEvent<HTMLInputElement>) => {
     const clickedProductItemNo = Number(e.currentTarget.value);
     dispatch(setProductSellYn(clickedProductItemNo));
@@ -305,6 +304,7 @@ const CartPage = () => {
                   <CheckButton
                     type='shopping'
                     text='CONTINUE SHOPPING'
+                    callback={dispatch(synchronize(productList))}
                   />
                 </Link>
                 <Link className='link' href='products'>
