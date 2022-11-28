@@ -44,9 +44,9 @@ const Dropdown = (props: {
 
   return (
     <DropdownContainer>
-      <div>{content}</div>
+      <div>{data ? content : '사용 가능한 쿠폰이 없습니다'}</div>
       {
-        isShow && (
+        (isShow && data) && (
           <ul>
             <li onClick={changeHandler}>선택 안함</li>
             {

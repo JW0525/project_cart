@@ -9,13 +9,14 @@ import textCss from "../../styles/textCss";
 import { NumberToCurrency } from "../../utils/regExpression";
 import Head from "next/head";
 import {useDispatch, useSelector} from "react-redux";
-import {initialize, ProductState } from "../../store/cartSlice";
+import {setProductList, ProductState } from "../../store/cartSlice";
 import Link from "next/link";
 import { addCartProducts } from "../../store/productsSlice";
 import { getProductList } from "../../store/productsSelector";
 import { backgroundImages, palette, radius } from "../../styles/baseStyle";
 import CartAnimation from "@/components/common/Animation";
 import HeadComponent from "@/components/common/Head";
+import CouponAvailableBox from "@/components/atoms/couponAvailableBox";
 
 const ProductsPageContainer = styled.div`
   width: 100%;
@@ -103,13 +104,6 @@ const ProductsPageContainer = styled.div`
             
             p {
               ${textCss.gray14Bold}
-            }
-            
-            span {
-              padding: 2px 4px;
-              background-color: ${palette.gray.lightEE};
-              ${radius.micro};
-              ${textCss.gray12Medium}
             }
           }
         }
@@ -209,7 +203,7 @@ const ProductsPage: NextPageWithLayout = () => {
                       <div>
                         <p>{NumberToCurrency(product.price)}</p>
                         {
-                          (product.availableCoupon !== false) && <span>쿠폰 사용 가능</span>
+                          (product.availableCoupon !== false) && <CouponAvailableBox />
                         }
                       </div>
                     </div>
@@ -227,7 +221,7 @@ const ProductsPage: NextPageWithLayout = () => {
         </ul>
 
         <Link href='cart'>
-          <div onClick={() => dispatch(initialize(productList))}>
+          <div onClick={() => dispatch(setProductList(productList))}>
             장바구니로 이동
           </div>
         </Link>

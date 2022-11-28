@@ -29,7 +29,12 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    initialize: (state, action: PayloadAction<any>) => {
+    initialize: (state) => {
+      state.productList = [];
+      state.totalAmounts = 0;
+      state.coupon = {};
+    },
+    setProductList: (state, action: PayloadAction<any>) => {
       const productList = action.payload;
 
       const newProductList = [];
@@ -125,6 +130,7 @@ export default reducer;
 
 export const {
   initialize,
+  setProductList,
   setCoupon,
   setTotalAmounts,
   setProductSellYn,

@@ -9,8 +9,8 @@ import {
   addProductCount,
   deleteAllProduct,
   deleteProduct,
+  initialize,
   setAllProductSellYn,
-  setCoupon,
   setProductSellYn,
   setTotalAmounts
 } from "../../store/cartSlice";
@@ -22,8 +22,9 @@ import CheckButton from "@/components/common/CheckButton";
 import { synchronize } from "store/productsSlice";
 import getData from "@/lib/getData";
 import {API} from "../../config";
-import Modal from "./components/Modal";
+import CouponModal from "./components/CouponModal";
 import OrderTable from "./components/OrderTable";
+import { useRouter } from "next/router";
 
 const CartPageContainer = styled.div`
   ${uiCss.flexColumn.custom('flex-start', 'center')}
@@ -96,13 +97,6 @@ const CartPageContainer = styled.div`
   .check-button-container {
     display: flex;
     grid-column-gap: 10px;
-    
-     button {
-       &.check-out {
-         background-color: ${palette.common.black};
-         color: ${palette.common.white};
-       }
-    }
   }
 `
 
@@ -112,6 +106,7 @@ const CartPage = () => {
   const { data: couponData, isLoading } = getData(`${API.COUPONS}`);
 
   const dispatch = useDispatch();
+  const router = useRouter();
   const cart = useSelector(getCartData);
   const { productList, coupon } = cart;
 
@@ -148,8 +143,19 @@ const CartPage = () => {
     dispatch(deleteAllProduct());
   }
 
-  const linkToProductsPage = () => {
+  const handleDispatchProductList = () => {
     dispatch(synchronize(productList))
+    router.push('/products').then();
+  }
+
+  const handleDispatchCart = async () => {
+    // 카트 정보를 전달한다.
+    // 쿠폰 할인 금액이 0 인 경우, 쿠폰 차감하지 않는다.
+    // 지금은 초기화하고, products 페이지로 이동하는 것으로 한다.
+
+    alert('상품 구매가 완료되었습니다.');
+    await dispatch(initialize());
+    router.push('/products').then();
   }
 
   const calculateAmounts = (coupon: any) => {
@@ -157,6 +163,8 @@ const CartPage = () => {
     let totalAmountsOrigin = 0;
 
     const { type, discountAmount, discountRate } = coupon;
+    const sellYnProductList = productList.filter(product => product.isSellYn);
+    const isAllAvailableCoupon = !sellYnProductList.every(product => product.availableCoupon === false);
 
     for (let i in productList) {
       const { count, price, isSellYn, availableCoupon } = productList[i];
@@ -173,7 +181,7 @@ const CartPage = () => {
       }
     }
     //type 이 amount 인 경우, discountAmount 만큼 가격을 뺀다.
-    if (discountAmount) totalAmounts -= discountAmount;
+    if (discountAmount && isAllAvailableCoupon) totalAmounts -= discountAmount;
 
     return {
       totalAmounts,
@@ -199,8 +207,10 @@ const CartPage = () => {
         <StepBox />
         {
           showModal && (
-            <Modal
+            <CouponModal
+              selectedCoupon={coupon}
               couponData={couponData}
+              productList={productList}
               setShowModal={setShowModal}
             />
           )
@@ -242,19 +252,16 @@ const CartPage = () => {
               </div>
 
               <div className='check-button-container'>
-                <Link className='link' href='products'>
-                  <CheckButton
-                    type='shopping'
-                    text='CONTINUE SHOPPING'
-                    callback={ linkToProductsPage }
-                  />
-                </Link>
-                <Link className='link' href='products'>
-                  <CheckButton
-                    type='check-out'
-                    text='CHECK OUT'
-                  />
-                </Link>
+                <CheckButton
+                  type='white'
+                  text='CONTINUE SHOPPING'
+                  callback={ handleDispatchProductList }
+                />
+                <CheckButton
+                  type='black'
+                  text='CHECK OUT'
+                  callback={ handleDispatchCart }
+                />
               </div>
             </>
           )

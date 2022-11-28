@@ -2,6 +2,7 @@ import CheckBoxWrapper from "@/components/common/CheckBox";
 import { NumberToCurrency } from "../../../utils/regExpression";
 import React from "react";
 import {ProductState} from "../../../store/productsSlice";
+import CouponAvailableBox from "@/components/atoms/couponAvailableBox";
 
 const CartTableProduct = (props: {
   product: ProductState;
@@ -26,11 +27,14 @@ const CartTableProduct = (props: {
           <img src={product.detail_image_url} />
         </div>
         <div className='info-box'>
-          <h1>{product.item_name}</h1>
-          <span>
-            <p>{NumberToCurrency(product.price)}</p>
+          <div>
+            <h1>{product.item_name}</h1>
+            <CouponAvailableBox />
+          </div>
+          <div>
+            <h6>{NumberToCurrency(product.price)}</h6>
             <p>원</p>
-          </span>
+          </div>
         </div>
       </td>
 

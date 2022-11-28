@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import {border} from "../../../styles/baseStyle";
 import textCss from "styles/textCss";
 import {text} from "stream/consumers";
+import {NumberToCurrency} from "../../../utils/regExpression";
 
 const OrderTableContainer = styled.table`
   width: 100%;
@@ -72,20 +73,24 @@ const OrderTable = (props: {
 
       <tbody>
       <tr>
-        <td>{totalAmountsOrigin}<pre> 원</pre></td>
+        <td>{NumberToCurrency(totalAmountsOrigin)}<pre> 원</pre></td>
         <td>-</td>
         <td>
-          {totalAmountsOrigin-totalAmounts}<pre> 원</pre>
+          {NumberToCurrency(totalAmountsOrigin-totalAmounts)}<pre> 원</pre>
           {
-            coupon.title && (
+            (totalAmountsOrigin-totalAmounts > 0) && (
               <p className='coupon'>({coupon.title} 적용)</p>
             )
           }
         </td>
         <td>+</td>
-        <td>0 <pre> 원</pre></td>
+        <td>
+          0 <pre> 원</pre>
+        </td>
         <td>+</td>
-        <td>{totalAmounts} <pre> 원</pre></td>
+        <td>
+          {NumberToCurrency(totalAmounts)}<pre> 원</pre>
+        </td>
       </tr>
       </tbody>
     </OrderTableContainer>

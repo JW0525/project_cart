@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {addProductCount, deleteAllProduct, deleteProduct} from "./cartSlice";
+import {addProductCount, deleteAllProduct, deleteProduct, initialize} from "./cartSlice";
 
 export interface ProductState {
   detail_image_url: string,
@@ -46,6 +46,9 @@ const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(initialize, (state, action) => {
+        state.productList = [];
+      })
       .addCase(deleteAllProduct, (state, action) => {
         state.productList = [];
       })

@@ -1,9 +1,9 @@
 import Dropdown from "@/components/common/Dropdown";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "@emotion/styled";
 import {border, palette} from "../../../styles/baseStyle";
 import textCss from "../../../styles/textCss";
-import {setCoupon} from "../../../store/cartSlice";
+import {ProductState, setCoupon} from "../../../store/cartSlice";
 import {useDispatch} from "react-redux";
 
 const ModalContainer = styled.div`
@@ -100,14 +100,17 @@ const ModalContainer = styled.div`
   }
 `
 
-const Modal = (props: {
+const CouponModal = (props: {
+  selectedCoupon: any;
   couponData: any;
+  productList: ProductState[];
   setShowModal: Function;
 }) => {
-  const { couponData, setShowModal } = props;
+  const { selectedCoupon, couponData, productList, setShowModal } = props;
   const dispatch = useDispatch();
-  const [selectedCouponTitle, setSelectedCouponTitle] = useState('사용가능 쿠폰');
+  const [selectedCouponTitle, setSelectedCouponTitle] = useState('=== 사용가능 쿠폰 ===');
   const [showDropdown, setShowDropdown] = useState(false);
+  const isAvailableCoupon = !productList.every(product => product.availableCoupon === false);
 
   const handleSelectedCoupon = (e: any) => {
     const value = e.target.innerHTML;
@@ -115,13 +118,19 @@ const Modal = (props: {
   }
 
   const handleDispatchCoupon = () => {
+    setShowModal(false);    // 모달 창 닫기
+
     const coupon = couponData.find((data: any) =>
       data.title === selectedCouponTitle
     );
     dispatch(setCoupon(coupon));
-
-    setShowModal(false);    // 모달 창 닫기
   }
+
+  useEffect(() => {
+    if (selectedCoupon.title) {
+      setSelectedCouponTitle(selectedCoupon.title);
+    }
+  },[]);
 
   return (
     <ModalContainer>
@@ -138,7 +147,7 @@ const Modal = (props: {
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <Dropdown
-              data={couponData}
+              data={isAvailableCoupon ? couponData : null} /* 쿠폰 사용이 불가능한 상품들로만 구성시 null 값을 내려준다. */
               content={selectedCouponTitle}
               isShow={showDropdown}
               changeHandler={handleSelectedCoupon}
@@ -159,4 +168,4 @@ const Modal = (props: {
   )
 }
 
-export default Modal;
+export default CouponModal;

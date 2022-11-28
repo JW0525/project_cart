@@ -4,6 +4,8 @@ import React from "react";
 import { ProductState } from "../../../store/cartSlice";
 import styled from "@emotion/styled";
 import {border, palette} from "../../../styles/baseStyle";
+import {text} from "stream/consumers";
+import textCss from "../../../styles/textCss";
 
 const CartTableContainer = styled.table`
   width: 100%;
@@ -59,19 +61,32 @@ const CartTableContainer = styled.table`
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            grid-row-gap: 5px;
             padding: 20px;
-            
-            > h1 {
-              display: block;
-              white-space: normal;
-              display: -webkit-box;
-              -webkit-line-clamp: 2;
-              -webkit-box-orient: vertical;
-              overflow: hidden;
-            }
 
-            > span {
+            > div {
               display: flex;
+              align-items: center;
+              grid-column-gap: 5px;
+
+              h1 {
+                display: block;
+                white-space: normal;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                font-family: Campton-Semi-Bold, sans-serif;
+                font-size: 20px;
+                overflow: hidden;
+              }
+              
+              h6 {
+                font-family: Campton-Semi-Bold, sans-serif;
+              }
+              
+              p {
+                ${textCss.gray14Medium}
+              }
             }
           }
         }
