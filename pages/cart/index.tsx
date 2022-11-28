@@ -14,6 +14,7 @@ import CheckButton from "@/components/common/CheckButton";
 import { synchronize } from "store/productsSlice";
 import getData from "@/lib/getData";
 import {API} from "../../config";
+import Dropdown from "@/components/common/Dropdown";
 
 const CartPageContainer = styled.div`
   ${uiCss.flexColumn.custom('flex-start', 'center')}
@@ -267,34 +268,13 @@ const Modal = styled.div`
       width: 100%;
 
 
-      .coupon-dropdown {
+      .coupon-dropdown-wrapper {
         display: flex;
         justify-content: center;
         align-items: center;
         position: relative;
         height: 45px;
         ${border.grayLightDD};
-
-        ul {
-          //display: none;
-          position: absolute;
-          top: 40px;
-          left: -1px;
-          flex-direction: column;
-          width: 100.5%;
-          background-color: ${palette.common.white};
-          ${border.grayLightDD};
-          border-top-style: none !important;
-          ${textCss.gray12Medium};
-          z-index: 1;
-
-          li {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 40px;
-          }
-        }
       }
     }
     
@@ -336,13 +316,24 @@ const Modal = styled.div`
 
 const CartPage = () => {
   const { data: couponData, isLoading } = getData(`${API.COUPONS}`);
-  const [selectedCoupon, setSelectedCoupon] = useState('사용가능 쿠폰')
-
 
   const dispatch = useDispatch();
   const cart = useSelector(getCartData);
   const { productList } = cart;
+
+
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const [selectedCouponTitle, setSelectedCouponTitle] = useState('사용가능 쿠폰');
   const [totalAmounts, setTotalAmounts] = useState(0);
+
+
+
+  const handleCoupon = (e: any) => {
+    const value = e.target.innerHTML;
+    setSelectedCouponTitle(value);
+  }
+
 
   const handleAddProduct = (e: ChangeEvent<HTMLInputElement>) => {
     const clickedProductItemNo = Number(e.currentTarget.value);
@@ -402,20 +393,31 @@ const CartPage = () => {
   }
 
   useEffect(() => {
+
     if (couponData) {
       // coupon 을 적용하지 않을 때에도 이 부분을 이용한다.
-      const calculated = calculateAmounts(couponData[0]);
+      const coupon = couponData.find((data: any) =>
+        data.title === selectedCouponTitle
+      );
+
+
+      const calculated = calculateAmounts(coupon);
 
       setTotalAmounts(calculated);
     }
-  },[productList]);
+  },[productList, selectedCouponTitle]); // 적용하기 버튼을 눌렀을 때에만 동작하도록 변경.
 
-  const changeHandler = (e: any) => {
-    const value = e.target.innerHTML;
-    setSelectedCoupon(value);
-  }
 
-  const [showDropdown, setShowDropdown] = useState(false);
+
+
+
+
+
+
+
+
+
+  if (!couponData) return <></>
   return (
     <>
       <HeadComponent title='장바구니 페이지' name='cart' content='장바구니 페이지입니다.' />
@@ -425,27 +427,26 @@ const CartPage = () => {
         <Modal>
           <p className='modal-title coupon'>쿠폰 / 마일리지</p>
           <div className='modal-contents'>
+
+
+
             <div className='coupon-box'>
               <p>쿠폰</p>
-
               <div
-                className='coupon-dropdown'
+                className='coupon-dropdown-wrapper'
                 onClick={() => setShowDropdown(!showDropdown)}
               >
-                <div>{selectedCoupon}</div>
-                {
-                  showDropdown &&
-                  <ul>
-                    <li onClick={changeHandler}>쿠폰1</li>
-                    <li onClick={changeHandler}>쿠폰2</li>
-                  </ul>
-                }
-
+                <Dropdown
+                  data={couponData}
+                  content={selectedCouponTitle}
+                  isShow={showDropdown}
+                  changeHandler={handleCoupon}
+                />
               </div>
-
-
-
             </div>
+
+
+
             <div className='mileage-box'>
               <p>마일리지</p>
               <div className='mileage-input-wrapper'>
