@@ -3,6 +3,8 @@ import styled from '@emotion/styled';
 import {backgroundImages} from "../../styles/baseStyle";
 
 const CheckBoxLayout = styled.label`
+  cursor: pointer;
+  
   > input {
     display: none;
   }

@@ -16,13 +16,13 @@ export interface ProductState {
 export interface CartState {
   productList: ProductState[],
   totalAmounts: number
-  coupon?: string
+  coupon?: any
 }
 
 const initialState: CartState = {
   productList: [],
   totalAmounts: 0,
-  coupon: ''
+  coupon: {}
 }
 
 const cartSlice = createSlice({
@@ -43,6 +43,17 @@ const cartSlice = createSlice({
       }
 
       state.productList = newProductList;
+    },
+    setCoupon: (state, action) => {
+      if (action.payload) {
+        state.coupon = action.payload;
+        return;
+      }
+
+      state.coupon = {};
+    },
+    setTotalAmounts: (state, action) => {
+      state.totalAmounts = action.payload;
     },
     setProductSellYn: (state, action) => {
       const { productList } = state;
@@ -114,6 +125,8 @@ export default reducer;
 
 export const {
   initialize,
+  setCoupon,
+  setTotalAmounts,
   setProductSellYn,
   setAllProductSellYn,
   deleteProduct,

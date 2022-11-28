@@ -1,7 +1,112 @@
 import CheckBoxWrapper from "@/components/common/CheckBox";
-import CartTableProducts from "./CartTableProducts";
+import CartTableProduct from "./CartTableProduct";
 import React from "react";
 import { ProductState } from "../../../store/cartSlice";
+import styled from "@emotion/styled";
+import {border, palette} from "../../../styles/baseStyle";
+
+const CartTableContainer = styled.table`
+  width: 100%;
+  border-top: ${border.grayMain4x.border};
+  border-bottom: ${border.grayMain.border};
+  
+  thead {
+    tr {
+      display: grid;
+      grid-template-columns: 60px 1fr 175px 175px 125px;
+      align-items: center;
+      height: 70px;
+
+      td {
+        display: flex;
+        justify-content: center;
+        align-items: center;         
+      }
+    }
+  }
+  
+  tbody {
+    tr {
+      display: grid;
+      grid-template-columns: 60px 1fr 175px 175px 125px;
+      align-items: center;
+      height: 175px;
+      border-top: ${border.grayLightDD.border};
+
+      td {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+
+        :nth-of-type(2), :nth-of-type(3), :nth-of-type(4) {
+          border-right: ${border.grayLightDD.border};
+        }
+
+        &.product-info {
+          display: grid;
+          grid-template-columns: 120px 1fr;
+          min-width: 300px;
+
+          .image-wrapper {
+            img {
+              width: 100%;
+              object-fit: cover;
+            }
+          }
+
+          .info-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            
+            > h1 {
+              display: block;
+              white-space: normal;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            }
+
+            > span {
+              display: flex;
+            }
+          }
+        }
+        
+        &.count {
+          .button-box {
+            display: grid;
+            grid-template-columns: 30px 30px 30px;
+            height: 30px;
+            background-color: white;
+            ${border.grayLightEE};
+
+            > div, button {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding-top: 3px;
+              text-align: center;
+              background-color: ${palette.common.white};
+
+              :nth-of-type(1) {
+                border-right: ${border.grayLightEE.border};
+              }
+            }
+
+            button {
+              color: ${palette.gray.lightAA};
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+`
 
 const CartTable = (props: {
   productList: ProductState[];
@@ -12,7 +117,7 @@ const CartTable = (props: {
   const { productList, handleAddProduct, handleAddAllProduct, handleProductCount } = props;
 
   return (
-    <table className='cart-table'>
+    <CartTableContainer className='cart-table'>
       <thead>
       <tr>
         <td>
@@ -31,7 +136,7 @@ const CartTable = (props: {
       {
         productList.map((product: any, idx: number) =>
           <tr key={idx}>
-            <CartTableProducts
+            <CartTableProduct
               product={product}
               handleClick={handleAddProduct}
               handleProductCount={handleProductCount}
@@ -41,7 +146,7 @@ const CartTable = (props: {
         )
       }
       </tbody>
-    </table>
+    </CartTableContainer>
   )
 }
 

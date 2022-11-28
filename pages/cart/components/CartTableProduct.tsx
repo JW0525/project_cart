@@ -3,7 +3,7 @@ import { NumberToCurrency } from "../../../utils/regExpression";
 import React from "react";
 import {ProductState} from "../../../store/productsSlice";
 
-const CartTableProducts = (props: {
+const CartTableProduct = (props: {
   product: ProductState;
   handleClick: Function;
   handleProductCount: Function;
@@ -34,20 +34,14 @@ const CartTableProducts = (props: {
         </div>
       </td>
 
-
-
       <td className='count'>
         <div
           className='button-box'
           onClick={(e) => handleProductCount(e)}
         >
-          <button data-item={product.item_no} data-button-type={'subtract'}>
-            -
-          </button>
+          <button data-item={product.item_no}data-button-type={'subtract'}>-</button>
           <div>{product.count}</div>
-          <button data-item={product.item_no} data-button-type={'add'}>
-            +
-          </button>
+          <button data-item={product.item_no} data-button-type={'add'}>+</button>
         </div>
       </td>
 
@@ -57,4 +51,4 @@ const CartTableProducts = (props: {
   )
 }
 
-export default CartTableProducts;
+export default CartTableProduct;
