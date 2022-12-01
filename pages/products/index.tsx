@@ -75,7 +75,8 @@ const ProductsPageLayout = styled.div`
           pre {
             text-align: center;
             color:rgba(256, 256, 256, 0.8);
-            font-size: 1rem;
+            font-size: 1.2rem;
+            line-height: 1.5rem;
             
             &.not-show {
               visibility: hidden;
@@ -219,12 +220,6 @@ const ProductsPage: NextPageWithLayout = () => {
             })
           }
         </ul>
-
-        <Link href='cart'>
-          <div>
-            장바구니로 이동
-          </div>
-        </Link>
       </ProductsPageLayout>
     </>
   )

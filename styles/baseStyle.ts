@@ -219,3 +219,8 @@ export const backgroundImages = {
     background-size: contain;
   `
 }
+
+export const backgroundIcons = {
+  backgroundImage: `url('https://img.29cm.co.kr/next29cm/sp_29cm.png')`,
+  backgroundRepeat: 'no-repeat',
+}

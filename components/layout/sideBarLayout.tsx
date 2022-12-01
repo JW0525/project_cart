@@ -10,7 +10,7 @@ const SideBarContainer = styled.div`
   
   .side-bar {
     position: absolute;
-    top: 300px;
+    top: 350px;
     width: 300px;
     height: 100%;
     padding: 0 50px;
