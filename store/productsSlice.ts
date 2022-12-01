@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {addProductCount, deleteAllProduct, deleteProduct, initialize} from "./cartSlice";
+import { deleteAllProduct, deleteProduct, initialize } from "./cartSlice";
 
 export interface ProductState {
   detail_image_url: string,

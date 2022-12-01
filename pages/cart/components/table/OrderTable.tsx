@@ -4,6 +4,7 @@ import textCss from "styles/textCss";
 import { border } from "../../../../styles/baseStyle";
 import { NumberToCurrency } from "../../../../utils/regExpression";
 import uiCss from "styles/uiCss";
+import { IAmounts } from "../../index";
 
 const OrderTableLayout = styled.table`
   width: 100%;
@@ -52,11 +53,11 @@ const OrderTableLayout = styled.table`
 `
 
 const OrderTable = (props: {
-  amounts: any;
+  amounts: IAmounts;
   coupon: any;
 }) => {
   const { amounts, coupon } = props;
-  const { totalAmounts, totalAmountsOrigin} = amounts;
+  const { totalAmounts, totalAmountsOrigin } = amounts;
 
   return (
     <OrderTableLayout className='order-table'>

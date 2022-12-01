@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import { useDispatch } from "react-redux";
-import { ProductState, setCoupon } from "../../../../store/cartSlice";
+import {CouponState, ProductState, setCoupon} from "../../../../store/cartSlice";
 import styled from "@emotion/styled";
-import {backgroundImages, border, palette } from "../../../../styles/baseStyle";
+import {backgroundImages, border, palette, radius } from "../../../../styles/baseStyle";
 import textCss from "../../../../styles/textCss";
 import Dropdown from "@/components/common/Dropdown";
 import uiCss from "../../../../styles/uiCss";
@@ -19,6 +19,7 @@ const CouponModalLayout = styled.div`
   padding: 30px;
   background-color: ${palette.common.white};
   ${border.grayLightDD};
+  ${radius.mini};
   z-index: 50;
 
   .modal-title {
@@ -110,8 +111,8 @@ const CouponModalLayout = styled.div`
 `
 
 const CouponModal = (props: {
-  selectedCoupon: any;
-  couponData: any;
+  selectedCoupon: CouponState;
+  couponData: CouponState[];
   productList: ProductState[];
   setShowModal: Function;
 }) => {

@@ -92,7 +92,9 @@ const ProductsPage: NextPageWithLayout = () => {
           {
             sortedData.slice(offset, offset + limit).map((product: ProductState, idx: number) => {
               const isClickedProduct = clickedProductItemNo === product.item_no;
-              const isListHavingProduct = productList.some((item: any) => item.item_no === product.item_no);
+              const isListHavingProduct = productList.some((item: ProductState) =>
+                item.item_no === product.item_no
+              );
 
               return (
                 <li key={idx}>

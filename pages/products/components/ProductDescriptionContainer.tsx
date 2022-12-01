@@ -49,7 +49,7 @@ const DescriptionContainerLayout = styled.div`
 const ProductDescriptionContainer = (props: {
   itemName: string;
   itemPrice: number;
-  itemNumber: any;
+  itemNumber: number;
   isAvailableCoupon: boolean;
   isListHavingProduct: boolean;
   addCartHandler: any;

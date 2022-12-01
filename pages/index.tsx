@@ -15,9 +15,7 @@ export default function IndexPage() {
 
   return (
     <div>
-      <LoadingBar
-       left={0}
-      />
+      <LoadingBar left={0} />
     </div>
   );
 }

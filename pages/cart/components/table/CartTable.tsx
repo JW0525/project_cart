@@ -149,7 +149,7 @@ const CartTable = (props: {
       </thead>
       <tbody>
       {
-        productList.map((product: any, idx: number) =>
+        productList.map((product: ProductState, idx: number) =>
           <tr key={idx}>
             <CartTableProduct
               product={product}

@@ -5,7 +5,7 @@ import { API } from "../../config";
 import { synchronize } from "store/productsSlice";
 import { getCartData } from "../../store/cartSelector";
 import {
-  addProductCount,
+  addProductCount, CouponState,
   deleteAllProduct,
   deleteProduct,
   initialize,
@@ -77,6 +77,11 @@ const CartPageLayout = styled.div`
   }
 `
 
+export interface IAmounts {
+  totalAmounts: number,
+  totalAmountsOrigin: number
+}
+
 const CartPage = () => {
   const { data: couponData, isLoading } = getData(`${API.COUPONS}`);
   const router = useRouter();
@@ -85,7 +90,7 @@ const CartPage = () => {
   const { productList, coupon } = cart;
 
   const [showModal, setShowModal] = useState(false);
-  const [amounts, setAmounts] = useState({
+  const [amounts, setAmounts] = useState<IAmounts>({
     totalAmounts: 0,
     totalAmountsOrigin: 0
   });
@@ -136,7 +141,7 @@ const CartPage = () => {
     router.push('/products').then();
   }
 
-  const calculateAmounts = (coupon: any) => {
+  const calculateAmounts = (coupon: CouponState) => {
     let totalAmounts = 0;
     let totalAmountsOrigin = 0;
 
@@ -168,7 +173,7 @@ const CartPage = () => {
   }
 
   useEffect(() => {
-    const { totalAmounts, totalAmountsOrigin } = calculateAmounts(coupon);
+    const { totalAmounts, totalAmountsOrigin } = calculateAmounts(coupon as CouponState);
 
     setAmounts({ totalAmounts, totalAmountsOrigin });
   },[productList, coupon]);

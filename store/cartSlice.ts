@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import productsSlice, {addCartProducts, synchronize } from "./productsSlice";
-import {getProductList} from "./productsSelector";
+import {addCartProducts } from "./productsSlice";
 
 export interface ProductState {
   detail_image_url: string,
@@ -16,13 +15,23 @@ export interface ProductState {
 export interface CartState {
   productList: ProductState[],
   totalAmounts: number
-  coupon?: any
+  coupon?: CouponState
+}
+
+export interface CouponState {
+  type: string,
+  title: string,
+  discountRate?: number
+  discountAmount?: number
 }
 
 const initialState: CartState = {
   productList: [],
   totalAmounts: 0,
-  coupon: {}
+  coupon: {
+    type: '',
+    title: ''
+  }
 }
 
 const cartSlice = createSlice({
@@ -32,7 +41,10 @@ const cartSlice = createSlice({
     initialize: (state) => {
       state.productList = [];
       state.totalAmounts = 0;
-      state.coupon = {};
+      state.coupon = {
+        type: '',
+        title: ''
+      };
     },
     setProductList: (state, action: PayloadAction<any>) => { // 현재는 장바구니 담는 즉시 추가.
       const productList = action.payload;
@@ -55,7 +67,7 @@ const cartSlice = createSlice({
         return;
       }
 
-      state.coupon = {};
+      state.coupon = { type: '', title: '' }
     },
     setTotalAmounts: (state, action) => {
       state.totalAmounts = action.payload;
@@ -91,12 +103,12 @@ const cartSlice = createSlice({
         return !product.isSellYn
       });
 
-      if (state.productList.length === 0) state.coupon = {};
+      if (state.productList.length === 0) state.coupon = { type: '', title: '' }
     },
 
     deleteAllProduct: (state) => {
       state.productList = [];
-      state.coupon = {}; // 전체 상품 삭제시 쿠폰 초기화.
+      state.coupon = { type: '', title: '' } // 전체 상품 삭제시 쿠폰 초기화.
     },
 
     addProductCount: (state, action) => {
@@ -122,8 +134,6 @@ const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(addCartProducts, (state, action) => {
-      })
       .addDefaultCase((state, action) => {
         // console.log(action);
       });
