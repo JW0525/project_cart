@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { useDispatch } from "react-redux";
 import { ProductState, setCoupon } from "../../../../store/cartSlice";
 import styled from "@emotion/styled";
-import { border, palette } from "../../../../styles/baseStyle";
+import {backgroundImages, border, palette } from "../../../../styles/baseStyle";
 import textCss from "../../../../styles/textCss";
 import Dropdown from "@/components/common/Dropdown";
 
@@ -30,6 +30,14 @@ const CouponModalLayout = styled.div`
     p {
       ${textCss.gray18Bold};
       font-family: Campton-Semi-Bold, sans-serif;
+    }
+    
+    span {
+      width: 20px;
+      height: 20px;
+      margin: 7.5px;
+      ${backgroundImages.icon('delete-button.png')};
+      cursor: pointer;
     }
     
     button {
@@ -114,6 +122,7 @@ const CouponModal = (props: {
   const [selectedCouponTitle, setSelectedCouponTitle] = useState('=== 사용가능 쿠폰 ===');
   const [showDropdown, setShowDropdown] = useState(false);
   const isAvailableCoupon = !productList.every(product => product.availableCoupon === false);
+  const refSelectedCouponTitle = useRef(selectedCouponTitle).current;
 
   const handleClose = () => {
     document.body.style.overflow = 'unset';
@@ -148,7 +157,11 @@ const CouponModal = (props: {
     <CouponModalLayout>
       <div className='modal-title'>
         <p>쿠폰 / 마일리지</p>
-        <button onClick={() => handleDispatchCoupon()}>적용하기</button>
+        {
+          (refSelectedCouponTitle === selectedCouponTitle) ?
+          <span onClick={handleClose} /> :
+          <button onClick={() => handleDispatchCoupon()}>적용하기</button>
+        }
       </div>
 
       <div className='modal-contents'>
