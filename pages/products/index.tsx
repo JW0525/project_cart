@@ -13,11 +13,12 @@ import SideBarLayout from "@/components/layout/sideBarLayout";
 import ProductImageWrapper from "./components/ProductImageWrapper";
 import ProductDescriptionContainer from "./components/ProductDescriptionContainer";
 import Pagination from "./components/Pagination";
+import LoadingBar from "@/components/common/LoadingBar";
 
 const ProductsPageLayout = styled.div`
   width: 100%;
   margin-left: 300px;
-
+  
   ul {
     display: flex;
     justify-content: space-between;
@@ -76,7 +77,13 @@ const ProductsPage: NextPageWithLayout = () => {
     dispatch(setProductList(productList));
   },[productList]);
 
-  if (!data) return <></>
+  if (isLoading) return (
+    <ProductsPageLayout>
+      <LoadingBar
+        left={300}
+      />
+    </ProductsPageLayout>
+  )
   return (
     <>
       <HeadComponent title='상품 페이지' name='products' content='상품 페이지입니다.' />
