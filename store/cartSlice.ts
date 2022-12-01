@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import productsSlice, {addCartProducts, synchronize } from "./productsSlice";
 import {getProductList} from "./productsSelector";
-import {synchronize} from "./productsSlice";
 
 export interface ProductState {
   detail_image_url: string,
@@ -34,7 +34,7 @@ const cartSlice = createSlice({
       state.totalAmounts = 0;
       state.coupon = {};
     },
-    setProductList: (state, action: PayloadAction<any>) => {
+    setProductList: (state, action: PayloadAction<any>) => { // 현재는 장바구니 담는 즉시 추가.
       const productList = action.payload;
 
       const newProductList = [];
@@ -90,10 +90,13 @@ const cartSlice = createSlice({
       state.productList = productList.filter(product => {
         return !product.isSellYn
       });
+
+      if (state.productList.length === 0) state.coupon = {};
     },
 
     deleteAllProduct: (state) => {
       state.productList = [];
+      state.coupon = {}; // 전체 상품 삭제시 쿠폰 초기화.
     },
 
     addProductCount: (state, action) => {
@@ -119,6 +122,18 @@ const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(addCartProducts, (state, action) => {
+
+        }
+
+
+
+
+
+
+
+
+      )
       .addDefaultCase((state, action) => {
         // console.log(action);
       });

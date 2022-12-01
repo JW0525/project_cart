@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
-import {border, palette} from "../../styles/baseStyle";
+import { border, palette } from "../../styles/baseStyle";
 import textCss from "../../styles/textCss";
-
 
 const DropdownContainer = styled.div`
   display: flex;
@@ -13,7 +12,6 @@ const DropdownContainer = styled.div`
   cursor: pointer;
   
   ul {
-    //display: none;
     position: absolute;
     top: 40px;
     left: -1px;
@@ -39,16 +37,17 @@ const Dropdown = (props: {
   data: any;
   isShow: boolean;
   changeHandler: any;
+  placeHolder: string;
 }) => {
-  const { content, data, isShow, changeHandler } = props;
+  const { content, data, isShow, changeHandler, placeHolder } = props;
 
   return (
     <DropdownContainer>
-      <div>{data ? content : '사용 가능한 쿠폰이 없습니다'}</div>
+      <div>{content}</div>
       {
         (isShow && data) && (
           <ul>
-            <li onClick={changeHandler}>선택 안함</li>
+            <li onClick={changeHandler}>{placeHolder}</li>
             {
               data.map((e: any, idx: number) => {
                 return (

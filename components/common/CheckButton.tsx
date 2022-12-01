@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
-import textCss from "../../styles/textCss";
-import {border, palette} from "../../styles/baseStyle";
 import uiCss from "../../styles/uiCss";
+import textCss from "../../styles/textCss";
+import { border, palette } from "../../styles/baseStyle";
 
 const ButtonContainer = styled.button`
   ${uiCss.flexRow.center};

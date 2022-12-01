@@ -1,11 +1,10 @@
+import React from "react";
+import { ProductState } from "../../../../store/cartSlice";
+import styled from "@emotion/styled";
+import { border, palette } from "../../../../styles/baseStyle";
+import textCss from "../../../../styles/textCss";
 import CheckBoxWrapper from "@/components/common/CheckBox";
 import CartTableProduct from "./CartTableProduct";
-import React from "react";
-import { ProductState } from "../../../store/cartSlice";
-import styled from "@emotion/styled";
-import {border, palette} from "../../../styles/baseStyle";
-import {text} from "stream/consumers";
-import textCss from "../../../styles/textCss";
 
 const CartTableContainer = styled.table`
   width: 100%;
@@ -40,6 +39,7 @@ const CartTableContainer = styled.table`
         justify-content: center;
         align-items: center;
         height: 100%;
+        min-width: 60px;
 
         :nth-of-type(2), :nth-of-type(3), :nth-of-type(4) {
           border-right: ${border.grayLightDD.border};
@@ -155,7 +155,6 @@ const CartTable = (props: {
               product={product}
               handleClick={handleAddProduct}
               handleProductCount={handleProductCount}
-              idx={idx}
             />
           </tr>
         )

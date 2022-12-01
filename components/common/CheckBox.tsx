@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import {backgroundImages} from "../../styles/baseStyle";
+import { backgroundImages } from "../../styles/baseStyle";
 
 const CheckBoxLayout = styled.label`
   cursor: pointer;

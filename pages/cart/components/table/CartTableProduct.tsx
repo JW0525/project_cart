@@ -1,16 +1,15 @@
-import CheckBoxWrapper from "@/components/common/CheckBox";
-import { NumberToCurrency } from "../../../utils/regExpression";
 import React from "react";
-import {ProductState} from "../../../store/productsSlice";
+import { ProductState } from "../../../../store/productsSlice";
 import CouponAvailableBox from "@/components/atoms/couponAvailableBox";
+import CheckBoxWrapper from "@/components/common/CheckBox";
+import { NumberToCurrency } from "../../../../utils/regExpression";
 
 const CartTableProduct = (props: {
   product: ProductState;
   handleClick: Function;
   handleProductCount: Function;
-  idx: number;
 }) => {
-  const { product, handleClick, handleProductCount, idx } = props;
+  const { product, handleClick, handleProductCount } = props;
 
   return (
     <>
@@ -50,7 +49,7 @@ const CartTableProduct = (props: {
       </td>
 
       <td>{NumberToCurrency(product.price * product.count!)}</td>
-      <td>조건부 무료 배송</td>
+      <td>업체 무료 배송</td>
     </>
   )
 }

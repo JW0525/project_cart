@@ -2,7 +2,7 @@ import React, {ChangeEvent, useEffect, useState} from "react";
 import styled from "@emotion/styled";
 import uiCss from "../../styles/uiCss";
 import {border, palette} from "../../styles/baseStyle";
-import CartTable from "./components/CartTable";
+import CartTable from "./components/table/CartTable";
 import {getCartData} from "../../store/cartSelector";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -17,38 +17,20 @@ import {
 import HeadComponent from "@/components/common/Head";
 import StepBox from "./components/StepBox";
 import textCss from "../../styles/textCss";
-import Link from "next/link";
 import CheckButton from "@/components/common/CheckButton";
 import { synchronize } from "store/productsSlice";
 import getData from "@/lib/getData";
 import {API} from "../../config";
-import CouponModal from "./components/CouponModal";
-import OrderTable from "./components/OrderTable";
+import OrderTable from "./components/table/OrderTable";
 import { useRouter } from "next/router";
+import CouponModalContainer from "./components/couponModal/CartModalContainer";
 
-const CartPageContainer = styled.div`
+const CartPageLayout = styled.div`
   ${uiCss.flexColumn.custom('flex-start', 'center')}
   position: relative;
   width: 100%;
   height: 100%;
   margin-bottom: 300px;
-  
-  .step-box {
-    display: flex;
-    justify-content: center;
-    grid-column-gap: 10px;
-    min-width: 1024px;
-    padding: 10px 0 90px;
-    
-    p {
-      font-family: Campton-Medium, sans-serif;
-      color: ${palette.gray.lightDD};
-      
-      &.selected {
-        color: ${palette.gray.main};
-      }
-    }
-  }
   
   .empty-cart {
     ${uiCss.flexColumn.center};
@@ -60,7 +42,7 @@ const CartPageContainer = styled.div`
     
     p {
       ${textCss.gray20Medium};
-      font-size: 32px;
+      font-size: 30px;
     }
   }
   
@@ -74,7 +56,7 @@ const CartPageContainer = styled.div`
       margin-top: 30px;
 
       button {
-        width: 128px;
+        min-width: 128px;
         height: 40px;
         ${textCss.gray15Medium};
         ${border.grayMedium};
@@ -100,13 +82,10 @@ const CartPageContainer = styled.div`
   }
 `
 
-
-
 const CartPage = () => {
   const { data: couponData, isLoading } = getData(`${API.COUPONS}`);
-
-  const dispatch = useDispatch();
   const router = useRouter();
+  const dispatch = useDispatch();
   const cart = useSelector(getCartData);
   const { productList, coupon } = cart;
 
@@ -152,6 +131,10 @@ const CartPage = () => {
     // 카트 정보를 전달한다.
     // 쿠폰 할인 금액이 0 인 경우, 쿠폰 차감하지 않는다.
     // 지금은 초기화하고, products 페이지로 이동하는 것으로 한다.
+    if (productList.every(product => !product.isSellYn)) {
+      alert('선택된 상품이 없습니다.')
+      return;
+    }
 
     alert('상품 구매가 완료되었습니다.');
     await dispatch(initialize());
@@ -199,32 +182,37 @@ const CartPage = () => {
     dispatch(setTotalAmounts(amounts.totalAmounts));
   },[amounts]);
 
+  const modalData = () => {
+    return {
+      selectedCoupon: coupon,
+      couponData,
+      productList,
+      setShowModal
+    }
+  }
+
   if (!couponData) return <></>
   return (
     <>
       <HeadComponent title='장바구니 페이지' name='cart' content='장바구니 페이지입니다.' />
-      <CartPageContainer>
+      <CartPageLayout>
         <StepBox />
+
         {
           showModal && (
-            <CouponModal
-              selectedCoupon={coupon}
-              couponData={couponData}
-              productList={productList}
-              setShowModal={setShowModal}
-            />
+            <CouponModalContainer modalData={modalData}/>
           )
         }
+
         {
           !productList.length ? (
             <div className='empty-cart'>
               <p>장바구니에 담은 상품이 없습니다.</p>
-              <Link className='link' href='products'>
-                <CheckButton
-                  type='shopping'
-                  text='CONTINUE SHOPPING'
-                />
-              </Link>
+              <CheckButton
+                type='white'
+                text='CONTINUE SHOPPING'
+                callback={() => router.push('/products').then}
+              />
             </div>
           ) : (
             <>
@@ -266,7 +254,7 @@ const CartPage = () => {
             </>
           )
         }
-      </CartPageContainer>
+      </CartPageLayout>
     </>
   )
 };

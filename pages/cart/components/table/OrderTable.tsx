@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "@emotion/styled";
-import {border} from "../../../styles/baseStyle";
 import textCss from "styles/textCss";
-import {text} from "stream/consumers";
-import {NumberToCurrency} from "../../../utils/regExpression";
+import { border } from "../../../../styles/baseStyle";
+import { NumberToCurrency } from "../../../../utils/regExpression";
 
-const OrderTableContainer = styled.table`
+const OrderTableLayout = styled.table`
   width: 100%;
   border-top: ${border.grayMain4x.border};
   border-bottom: ${border.grayMain.border};
@@ -61,7 +60,7 @@ const OrderTable = (props: {
   const { totalAmounts, totalAmountsOrigin} = amounts;
 
   return (
-    <OrderTableContainer className='order-table'>
+    <OrderTableLayout className='order-table'>
       <thead>
       <tr>
         <td>총 주문금액</td>
@@ -93,7 +92,7 @@ const OrderTable = (props: {
         </td>
       </tr>
       </tbody>
-    </OrderTableContainer>
+    </OrderTableLayout>
   )
 }
 

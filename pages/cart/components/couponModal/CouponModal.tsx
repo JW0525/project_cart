@@ -1,21 +1,24 @@
-import Dropdown from "@/components/common/Dropdown";
 import React, {useEffect, useState} from "react";
+import { useDispatch } from "react-redux";
+import { ProductState, setCoupon } from "../../../../store/cartSlice";
 import styled from "@emotion/styled";
-import {border, palette} from "../../../styles/baseStyle";
-import textCss from "../../../styles/textCss";
-import {ProductState, setCoupon} from "../../../store/cartSlice";
-import {useDispatch} from "react-redux";
+import { border, palette } from "../../../../styles/baseStyle";
+import textCss from "../../../../styles/textCss";
+import Dropdown from "@/components/common/Dropdown";
 
-const ModalContainer = styled.div`
+const CouponModalLayout = styled.div`
   display: flex;
   flex-direction: column;
   grid-row-gap: 20px;
-  position: absolute;
-  top: calc(50% - 300px);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 500px;
   padding: 30px;
   background-color: ${palette.common.white};
   ${border.grayLightDD};
+  z-index: 50;
 
   .modal-title {
     display: flex;
@@ -112,13 +115,18 @@ const CouponModal = (props: {
   const [showDropdown, setShowDropdown] = useState(false);
   const isAvailableCoupon = !productList.every(product => product.availableCoupon === false);
 
+  const handleClose = () => {
+    document.body.style.overflow = 'unset';
+    setShowModal(false);    // 모달 창 닫기
+  }
+
   const handleSelectedCoupon = (e: any) => {
     const value = e.target.innerHTML;
     setSelectedCouponTitle(value);
   }
 
   const handleDispatchCoupon = () => {
-    setShowModal(false);    // 모달 창 닫기
+    handleClose();
 
     const coupon = couponData.find((data: any) =>
       data.title === selectedCouponTitle
@@ -127,13 +135,17 @@ const CouponModal = (props: {
   }
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden';    // 모달 창 바깥 영역 스크롤 방지
+  }, []);
+
+  useEffect(() => {
     if (selectedCoupon.title) {
       setSelectedCouponTitle(selectedCoupon.title);
     }
   },[]);
 
   return (
-    <ModalContainer>
+    <CouponModalLayout>
       <div className='modal-title'>
         <p>쿠폰 / 마일리지</p>
         <button onClick={() => handleDispatchCoupon()}>적용하기</button>
@@ -148,9 +160,10 @@ const CouponModal = (props: {
           >
             <Dropdown
               data={isAvailableCoupon ? couponData : null} /* 쿠폰 사용이 불가능한 상품들로만 구성시 null 값을 내려준다. */
-              content={selectedCouponTitle}
+              content={isAvailableCoupon ? selectedCouponTitle : '사용 가능한 쿠폰이 없습니다'}
               isShow={showDropdown}
               changeHandler={handleSelectedCoupon}
+              placeHolder='선택 안함'
             />
           </div>
         </div>
@@ -164,7 +177,7 @@ const CouponModal = (props: {
           </div>
         </div>
       </div>
-    </ModalContainer>
+    </CouponModalLayout>
   )
 }
 

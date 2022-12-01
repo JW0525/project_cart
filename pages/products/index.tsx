@@ -1,24 +1,25 @@
-import React, {ReactElement, useState} from "react";
-import getData from "@/lib/getData";
-import { API } from "../../config";
-import styled from "@emotion/styled";
-import { setResponsive } from "../../styles/setResponsive";
-import { NextPageWithLayout } from "../_app";
-import SideBarLayout from "@/components/layout/sideBarLayout";
-import textCss from "../../styles/textCss";
-import { NumberToCurrency } from "../../utils/regExpression";
-import Head from "next/head";
-import {useDispatch, useSelector} from "react-redux";
-import {setProductList, ProductState } from "../../store/cartSlice";
+import React, {ReactElement, useEffect, useState} from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
+import { API } from "../../config";
+import getData from "@/lib/getData";
+
+import {setProductList, ProductState, setProductSellYn} from "../../store/cartSlice";
 import { addCartProducts } from "../../store/productsSlice";
 import { getProductList } from "../../store/productsSelector";
-import { backgroundImages, palette, radius } from "../../styles/baseStyle";
+import { NextPageWithLayout } from "../_app";
+
+import styled from "@emotion/styled";
+import { setResponsive } from "../../styles/setResponsive";
+import textCss from "../../styles/textCss";
+import { backgroundImages } from "../../styles/baseStyle";
 import CartAnimation from "@/components/common/Animation";
 import HeadComponent from "@/components/common/Head";
 import CouponAvailableBox from "@/components/atoms/couponAvailableBox";
+import SideBarLayout from "@/components/layout/sideBarLayout";
+import { NumberToCurrency } from "../../utils/regExpression";
 
-const ProductsPageContainer = styled.div`
+const ProductsPageLayout = styled.div`
   width: 100%;
   margin-left: 300px;
 
@@ -134,9 +135,7 @@ const ProductsPage: NextPageWithLayout = () => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [clickedProductItemNo, setClickedProductItemNo] = useState(0);
 
-  if (isLoading) return <></>
-
-  const sortedData = data.sort(function(a: any, b: any) {
+  const sortedData = data && data.sort(function(a: any, b: any) {
     return b.score - a.score;
   })
 
@@ -149,7 +148,7 @@ const ProductsPage: NextPageWithLayout = () => {
     setClickedProductItemNo(clickedProductItemNo);
     setShowAnimation(false);
 
-    await dispatch(addCartProducts({
+    const res = await dispatch(addCartProducts({
       item_no: clickedProductItemNo,
       product: clickedProduct
     }));
@@ -164,29 +163,30 @@ const ProductsPage: NextPageWithLayout = () => {
     }
   }
 
+  useEffect(() => {
+    dispatch(setProductList(productList));
+  },[productList]);
+
   return (
     <>
       <HeadComponent title='상품 페이지' name='products' content='상품 페이지입니다.' />
 
-      <ProductsPageContainer>
+      <ProductsPageLayout>
         <ul>
           {
-            sortedData.map((product: ProductState, idx: number) => {
+            sortedData?.map((product: ProductState, idx: number) => {
               const isClickedProduct = clickedProductItemNo === product.item_no;
-              const isListHavingProduct = productList.some(item => item.item_no === product.item_no);
+              const isListHavingProduct = productList.some((item: any) => item.item_no === product.item_no);
 
               return (
                 <li key={idx}>
                   <div className='image-wrapper'>
                     <img src={product.detail_image_url} />
                     {
-                      (showAnimation && isClickedProduct)
-                        && (
-                        <CartAnimation />
-                      )
+                      (showAnimation && isClickedProduct) && <CartAnimation />
                     }
                     {
-                      (isListHavingProduct)
+                      isListHavingProduct
                        && (
                         <div className='background'>
                           <pre className={`${(showAnimation && isClickedProduct) && 'not-show'}`}>
@@ -221,11 +221,11 @@ const ProductsPage: NextPageWithLayout = () => {
         </ul>
 
         <Link href='cart'>
-          <div onClick={() => dispatch(setProductList(productList))}>
+          <div>
             장바구니로 이동
           </div>
         </Link>
-      </ProductsPageContainer>
+      </ProductsPageLayout>
     </>
   )
 };

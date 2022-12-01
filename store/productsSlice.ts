@@ -53,13 +53,11 @@ const cartSlice = createSlice({
         state.productList = [];
       })
       .addCase(deleteProduct, (state, action) => {
-        const cartList = action.payload;
+        const cartProductList = action.payload;
 
-        state.productList = cartList.filter((product: ProductState) => {
+        state.productList = cartProductList.filter((product: ProductState) => {
           return !product.isSellYn;
         });
-      })
-      .addCase(addProductCount, (state, action) => {
       })
       .addDefaultCase((state, action) => {
         // console.log(action);
