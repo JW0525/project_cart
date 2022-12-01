@@ -11,6 +11,8 @@ const CartTableProduct = (props: {
 }) => {
   const { product, handleClick, handleProductCount } = props;
 
+  console.log(product);
+
   return (
     <>
       <td>
@@ -28,7 +30,10 @@ const CartTableProduct = (props: {
         <div className='info-box'>
           <div>
             <h1>{product.item_name}</h1>
-            <CouponAvailableBox />
+            {
+              (product!.availableCoupon !== false) &&
+              <CouponAvailableBox />
+            }
           </div>
           <div>
             <h6>{NumberToCurrency(product.price)}</h6>

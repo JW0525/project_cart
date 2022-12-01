@@ -123,17 +123,7 @@ const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(addCartProducts, (state, action) => {
-
-        }
-
-
-
-
-
-
-
-
-      )
+      })
       .addDefaultCase((state, action) => {
         // console.log(action);
       });

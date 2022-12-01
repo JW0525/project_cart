@@ -9,6 +9,7 @@ export interface ProductState {
   score: number,
   isSellYn: boolean
   count?: number,
+  availableCoupon?: boolean
 }
 
 export interface ProductListState {

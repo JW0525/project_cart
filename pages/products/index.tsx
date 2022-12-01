@@ -12,6 +12,7 @@ import HeadComponent from "@/components/common/Head";
 import SideBarLayout from "@/components/layout/sideBarLayout";
 import ProductImageWrapper from "./components/ProductImageWrapper";
 import ProductDescriptionContainer from "./components/ProductDescriptionContainer";
+import Pagination from "./components/Pagination";
 
 const ProductsPageLayout = styled.div`
   width: 100%;
@@ -38,9 +39,14 @@ const ProductsPage: NextPageWithLayout = () => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [clickedProductItemNo, setClickedProductItemNo] = useState(0);
 
+  const [limit, setLimit] = useState(6); // 한번에 보여줄 상품 수
+  const [page, setPage] = useState(1); // 현재 페이지
+  const offset = (page - 1) * limit;
+
   const sortedData = data && data.sort(function(a: any, b: any) {
     return b.score - a.score;
   })
+
 
   const addCartHandler = async (e: any) => {
     const clickedProductItemNo = Number(e.currentTarget.value);
@@ -70,13 +76,14 @@ const ProductsPage: NextPageWithLayout = () => {
     dispatch(setProductList(productList));
   },[productList]);
 
+  if (!data) return <></>
   return (
     <>
       <HeadComponent title='상품 페이지' name='products' content='상품 페이지입니다.' />
       <ProductsPageLayout>
         <ul>
           {
-            sortedData?.map((product: ProductState, idx: number) => {
+            sortedData.slice(offset, offset + limit).map((product: ProductState, idx: number) => {
               const isClickedProduct = clickedProductItemNo === product.item_no;
               const isListHavingProduct = productList.some((item: any) => item.item_no === product.item_no);
 
@@ -100,6 +107,12 @@ const ProductsPage: NextPageWithLayout = () => {
             })
           }
         </ul>
+        <Pagination
+          total={sortedData?.length}
+          limit={limit}
+          page={page}
+          setPage={setPage}
+        />
       </ProductsPageLayout>
     </>
   )
