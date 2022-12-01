@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import CartAnimation from "@/components/common/Animation";
 import uiCss from "../../../styles/uiCss";
-import { backgroundIcons } from "styles/baseStyle";
+import { backgroundIcons, palette } from "styles/baseStyle";
 
 const ImageWrapperLayout = styled.div`
   // image width, height 비율 같게 하기 위해서 image 를 감싸준다.
@@ -14,6 +14,20 @@ const ImageWrapperLayout = styled.div`
   width: 100%;
   min-width: 245px;
   padding-top: 100%;
+  
+  .score {
+    position: absolute;
+    top: 0;
+    left: 0;
+    ${uiCss.flexRow.center};
+    width: 25px;
+    height: 25px;
+    padding-top: 3px;
+    background-color: ${palette.common.white};
+    font-family: Campton-Extra-Bold, sans-serif;
+    z-index: 1;
+  }
+  
 
   img {
     position: absolute;
@@ -81,17 +95,18 @@ const ImageWrapperLayout = styled.div`
   }
 `
 
-
 const ProductImageWrapper = (props: {
+  score: number;
   imgUrl: string;
   isShowAnimation: boolean;
   isListHavingProduct: boolean;
 }) => {
-  const { imgUrl, isShowAnimation, isListHavingProduct } = props;
+  const { score, imgUrl, isShowAnimation, isListHavingProduct } = props;
   const router = useRouter();
 
   return (
     <ImageWrapperLayout>
+      <span className='score'>{score}</span>
       <img src={imgUrl} />
       {
         isShowAnimation && <CartAnimation />

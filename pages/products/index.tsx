@@ -95,10 +95,12 @@ const ProductsPage: NextPageWithLayout = () => {
               const isListHavingProduct = productList.some((item: ProductState) =>
                 item.item_no === product.item_no
               );
+              console.log(offset);
 
               return (
                 <li key={idx}>
                   <ProductImageWrapper
+                    score={idx + offset + 1}
                     imgUrl={product.detail_image_url}
                     isShowAnimation={showAnimation && isClickedProduct}
                     isListHavingProduct={isListHavingProduct}
