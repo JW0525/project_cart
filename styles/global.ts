@@ -49,6 +49,7 @@ const global = css`
   }
 
   .link {
+    margin: 0;
     color: inherit;
     text-decoration: none;
   }
