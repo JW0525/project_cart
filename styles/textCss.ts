@@ -10,6 +10,14 @@ const gray35Bold = css`
   color: ${palette.gray.main};
 `;
 
+const gray30Medium = css`
+  ${fontFamily.notoSans500}
+  ${fontSizes.f30};
+  ${letterSpacing.main};
+  color: ${palette.gray.main};
+`;
+
+
 const gray25Bold = css`
   ${fontFamily.notoSans700};
   ${fontSizes.f25};
@@ -274,6 +282,7 @@ const textCss = {
   gray20Medium,
   gray22Bold,
   gray25Bold,
+  gray30Medium,
   gray35Bold,
 
   white11Medium,

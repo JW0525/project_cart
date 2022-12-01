@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import {palette} from "../../../styles/baseStyle";
+import { palette } from "../../../styles/baseStyle";
 
 const StepBoxLayout = styled.div`
   display: flex;

@@ -105,6 +105,9 @@ export const fontSizes = {
   f25: {
     fontSize: '25px'
   },
+  f30: {
+    fontSize: '30px'
+  },
   f35: {
     fontSize: '35px'
   }

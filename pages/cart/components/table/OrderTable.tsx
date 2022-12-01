@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import textCss from "styles/textCss";
 import { border } from "../../../../styles/baseStyle";
 import { NumberToCurrency } from "../../../../utils/regExpression";
+import uiCss from "styles/uiCss";
 
 const OrderTableLayout = styled.table`
   width: 100%;
@@ -31,10 +32,8 @@ const OrderTableLayout = styled.table`
       border-top: ${border.grayLightDD.border};
 
       td {
-        display: flex;
-        justify-content: center;
-        align-items: center;
         position: relative;
+        ${uiCss.flexRow.center};
         font-family: Campton-Semi-Bold, sans-serif;
         font-size: 32px;
         

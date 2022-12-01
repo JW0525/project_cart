@@ -1,10 +1,9 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
-import styled from "@emotion/styled";
-import uiCss from "../../styles/uiCss";
-import {border, palette} from "../../styles/baseStyle";
-import CartTable from "./components/table/CartTable";
-import {getCartData} from "../../store/cartSelector";
-import {useDispatch, useSelector} from "react-redux";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { API } from "../../config";
+import { synchronize } from "store/productsSlice";
+import { getCartData } from "../../store/cartSelector";
 import {
   addProductCount,
   deleteAllProduct,
@@ -14,16 +13,18 @@ import {
   setProductSellYn,
   setTotalAmounts
 } from "../../store/cartSlice";
-import HeadComponent from "@/components/common/Head";
-import StepBox from "./components/StepBox";
+import styled from "@emotion/styled";
+import uiCss from "../../styles/uiCss";
+import { border, palette } from "../../styles/baseStyle";
 import textCss from "../../styles/textCss";
-import CheckButton from "@/components/common/CheckButton";
-import { synchronize } from "store/productsSlice";
 import getData from "@/lib/getData";
-import {API} from "../../config";
-import OrderTable from "./components/table/OrderTable";
-import { useRouter } from "next/router";
+import CheckButton from "@/components/common/CheckButton";
+import CartTable from "./components/table/CartTable";
 import CouponModalContainer from "./components/couponModal/CartModalContainer";
+import HeadComponent from "@/components/common/Head";
+import OrderTable from "./components/table/OrderTable";
+import StepBox from "./components/StepBox";
+import CheckButtonBox from "./components/CheckButtonContainer";
 
 const CartPageLayout = styled.div`
   ${uiCss.flexColumn.custom('flex-start', 'center')}
@@ -41,8 +42,7 @@ const CartPageLayout = styled.div`
     border-bottom: ${border.grayMain.border};
     
     p {
-      ${textCss.gray20Medium};
-      font-size: 30px;
+      ${textCss.gray30Medium};
     }
   }
   
@@ -59,8 +59,8 @@ const CartPageLayout = styled.div`
         min-width: 128px;
         height: 40px;
         ${textCss.gray15Medium};
-        ${border.grayMedium};
         background-color: ${palette.gray.main};
+        ${border.grayMedium};
         color: ${palette.common.white};
       }
       
@@ -74,11 +74,6 @@ const CartPageLayout = styled.div`
         }
       }
     }
-  }
-  
-  .check-button-container {
-    display: flex;
-    grid-column-gap: 10px;
   }
 `
 
@@ -191,19 +186,14 @@ const CartPage = () => {
     }
   }
 
-  if (!couponData) return <></>
   return (
     <>
       <HeadComponent title='장바구니 페이지' name='cart' content='장바구니 페이지입니다.' />
       <CartPageLayout>
         <StepBox />
-
         {
-          showModal && (
-            <CouponModalContainer modalData={modalData}/>
-          )
+          showModal && <CouponModalContainer modalData={modalData}/>
         }
-
         {
           !productList.length ? (
             <div className='empty-cart'>
@@ -239,18 +229,10 @@ const CartPage = () => {
                 />
               </div>
 
-              <div className='check-button-container'>
-                <CheckButton
-                  type='white'
-                  text='CONTINUE SHOPPING'
-                  callback={ handleDispatchProductList }
-                />
-                <CheckButton
-                  type='black'
-                  text='CHECK OUT'
-                  callback={ handleDispatchCart }
-                />
-              </div>
+              <CheckButtonBox
+                handleDispatchCart={handleDispatchCart}
+                handleDispatchProductList={handleDispatchProductList}
+              />
             </>
           )
         }

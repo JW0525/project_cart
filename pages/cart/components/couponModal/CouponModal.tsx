@@ -5,15 +5,16 @@ import styled from "@emotion/styled";
 import {backgroundImages, border, palette } from "../../../../styles/baseStyle";
 import textCss from "../../../../styles/textCss";
 import Dropdown from "@/components/common/Dropdown";
+import uiCss from "../../../../styles/uiCss";
 
 const CouponModalLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  grid-row-gap: 20px;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  grid-row-gap: 20px;
   width: 500px;
   padding: 30px;
   background-color: ${palette.common.white};
@@ -67,9 +68,7 @@ const CouponModalLayout = styled.div`
 
 
       .dropdown-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        ${uiCss.flexRow.center};
         position: relative;
         height: 45px;
         ${border.grayLightDD};
@@ -94,7 +93,6 @@ const CouponModalLayout = styled.div`
         
         &:disabled {
           background-color: ${palette.gray.lightEE};
-
         }
       }
 

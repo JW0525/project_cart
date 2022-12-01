@@ -26,7 +26,7 @@ const CheckBoxWrapper = (props: { isChecked: boolean; callback: any, value?: num
   const { isChecked, callback, value } = props;
 
   return (
-    <CheckBoxLayout className='checkBox'>
+    <CheckBoxLayout>
       <input
         type='checkBox'
         checked={isChecked}
